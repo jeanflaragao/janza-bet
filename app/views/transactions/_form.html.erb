@@ -1,0 +1,13 @@
+<%= form_with model: transaction, url: transactions_path, local: true do |f| %>
+<div class="flex flex-wrap gap-4 items-center">
+
+    <%= f.collection_select :book_id, Book.all, :id, :description, prompt: "Select a Book", class: "border p-2 w-48 rounded" %>
+
+    <%= f.select :transaction_type, ["deposit", "withdraw"], prompt: "Select Type", class: "border p-2 w-48 rounded" %>
+
+    <%= f.number_field :amount, placeholder: "Amount", class: "border p-2 w-40 rounded" %>
+
+    <%= f.submit "Create Transaction", class: "bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded font-semibold transition" %>
+
+</div>
+<% end %>

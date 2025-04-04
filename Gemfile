@@ -20,7 +20,7 @@ gem "tailwindcss-rails"
 gem "jbuilder"
 
 # Use Active Model has_secure_password [https://guides.rubyonrails.org/active_model_basics.html#securepassword]
-# gem "bcrypt", "~> 3.1.7"
+gem "bcrypt", "~> 3.1.7"
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
 gem "tzinfo-data", platforms: %i[ windows jruby ]
@@ -43,6 +43,12 @@ gem "thruster", require: false
 # gem "image_processing", "~> 1.2"
 
 group :development, :test do
+  gem "rspec-rails", "~> 7.0"
+  gem "factory_bot_rails", "~> 6.0"
+  gem "guard", "~> 2.0"
+  gem "guard-rspec", "~> 4.7"
+  gem "rubocop", "~> 1.0", require: false
+  gem "rubocop-rails", "~> 2.0", require: false
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem
   gem "debug", platforms: %i[ mri windows ], require: "debug/prelude"
 
@@ -54,6 +60,9 @@ group :development, :test do
 end
 
 group :development do
+  gem 'letter_opener', '~> 1'
+  gem 'letter_opener_web', '~> 3'
+
   # Use console on exceptions pages [https://github.com/rails/web-console]
   gem "web-console"
 end

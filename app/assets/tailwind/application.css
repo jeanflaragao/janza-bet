@@ -1,1 +1,14 @@
 @import "tailwindcss";
+
+
+th,
+td {
+    text-align: left;
+    padding: 8px;
+    white-space: nowrap;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+}

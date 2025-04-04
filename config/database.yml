@@ -13,21 +13,21 @@ default: &default
   adapter: mysql2
   encoding: utf8
   pool: 5
-  username: root
-  password: "cPCzfuSEfoQOBWKFMdRHoMxOrVmJTTdJ"
-  host: yamabiko.proxy.rlwy.net
+  username: <%= ENV['DB_USERNAME'] %>
+  password: <%= ENV['DB_PASSWORD'] %>
+  host: <%= ENV['DB_HOST'] %>
   port: 40473
 
 development:
   <<: *default
-  database: janza_bet_development
+  database: <%= ENV['DB_NAME'] %>
 
 # Warning: The database defined as "test" will be erased and
 # re-generated from your development database when you run "rake".
 # Do not set this db to the same as development or production.
 test:
   <<: *default
-  database: janza_bet_test
+  database: <%= ENV['DB_NAME'] %>
 
 # As with config/credentials.yml, you never want to store sensitive information,
 # like your database password, in your source code. If your source code is
@@ -54,7 +54,7 @@ production:
     <<: *default
     database: janza_bet_production
     username: janza_bet
-    password: <%= ENV["JANZA_BET_DATABASE_PASSWORD"] %>
+    password: <%= ENV['DB_PASSWORD'] %>
   cache:
     <<: *primary_production
     database: janza_bet_production_cache

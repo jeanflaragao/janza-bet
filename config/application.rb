@@ -12,6 +12,7 @@ require "action_mailbox/engine"
 require "action_text/engine"
 require "action_view/railtie"
 require "action_cable/engine"
+require 'dotenv'
 # require "rails/test_unit/railtie"
 
 # Require the gems listed in Gemfile, including any gems
@@ -37,6 +38,21 @@ module JanzaBet
     # config.eager_load_paths << Rails.root.join("extras")
 
     # Don't generate system test files.
-    config.generators.system_tests = nil
+    config.generators do |g|
+      g.test_framework :rspec,                # Set RSpec as the test framework
+                        fixtures: true,       # Generate fixtures (or factories)
+                        view_specs: false,    # Generate view specs
+                        helper_specs: false,  # Don't generate helper specs
+                        routing_specs: false, # Generate routing specs
+                        request_specs: true,  # Generate request specs
+                        system_tests: nil     # Disable system test generation inside this block
+
+      # Use FactoryBot for generating test data
+      g.fixture_replacement :factory_bot, dir: "spec/factories"
+      g.helper false                         # Disable helper generation
+    end
+
+    Dotenv.load
+
   end
 end

@@ -1,0 +1,27 @@
+<div class="w-full container mx-auto mt-16 px-5">
+    <div class="flex justify-between items-center mb-4">
+        <h1 class="font-bold text-4xl">Transactions</h1>
+    </div>
+    <!-- Form Section -->
+    <div class="bg-white shadow-md rounded-lg p-5 mb-5">
+        <%= turbo_frame_tag "new-transaction-form", src: new_transaction_path %>
+    </div>
+
+    <!-- Transactions Table -->
+    <div class="bg-white shadow-md rounded-lg p-5">
+        <div class="w-full border border-gray-300 rounded-md">
+            <div class="grid grid-cols-5 bg-gray-100 font-bold py-3 px-4 border-b">
+                <div>Date</div>
+                <div>Book</div>
+                <div>Type</div>
+                <div>Amount</div>
+                <div class="text-center">Actions</div>
+            </div>
+
+            <div id="transactions">
+                <%= render @transactions %>
+            </div>
+        </div>
+    </div>
+
+</div>
