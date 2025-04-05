@@ -3,7 +3,8 @@ class User < ApplicationRecord
   has_secure_token :confirmation_token
   has_many  :sessions, dependent: :destroy
   has_many :books, dependent: :destroy
-
+  has_many :bets
+  
   normalizes :email_address, with: ->(e) { e.strip.downcase }
   validates :email_address, presence: true, uniqueness: true, format: { with: URI::MailTo::EMAIL_REGEXP }
 

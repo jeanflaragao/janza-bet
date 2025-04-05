@@ -1,11 +1,14 @@
-    <nav class="bg-white shadow-md py-4 px-6 flex justify-between items-center">
-        <div class="flex space-x-4">
-            <%= link_to "Home", root_path, class: "text-gray-700 hover:text-blue-500" %>
-            <%= link_to "Book", books_path, class: "text-gray-700 hover:text-blue-500" %>
-            <%= link_to "Transaction", transactions_path, class: "text-gray-700 hover:text-blue-500" %>
-            <%= link_to "Group", tipsters_path, class: "text-gray-700 hover:text-blue-500" %>
-            <%= link_to "About Page", pages_about_path, class: "text-gray-700 hover:text-blue-500" %>
-            <%= link_to "Authentication Page", pages_authentification_path, class: "text-gray-700 hover:text-blue-500" %>
-            <%= link_to "Account Page", pages_account_path, class: "text-gray-700 hover:text-blue-500" %>
+    <nav class="bg-white shadow">
+        <div class="container mx-auto px-4">
+            <ul class="flex justify-center space-x-6 py-4 text-gray-700 font-medium gap-4">
+                <li><%= link_to "Home", root_path, class: "text-gray-700 hover:text-blue-500" %></li>
+                <li><%= link_to "Book", books_path, class: "text-gray-700 hover:text-blue-500" %></li>
+                <li><%= link_to "Transaction", transactions_path, class: "text-gray-700 hover:text-blue-500" %></li>
+                <li><%= link_to "Group", tipsters_path, class: "text-gray-700 hover:text-blue-500" %></li>
+                <li><%= link_to "Bets", bets_path, class: "text-gray-700 hover:text-blue-500" %></li>
+                <li><%= link_to "About Page", pages_about_path, class: "text-gray-700 hover:text-blue-500" %></li>
+                <li><%= link_to "Authentication Page", pages_authentification_path, class: "text-gray-700 hover:text-blue-500" %></li>
+                <li><%= link_to "Account Page", pages_account_path, class: "text-gray-700 hover:text-blue-500" %></li>
+            </ul>
         </div>
     </nav>

@@ -1,0 +1,20 @@
+<%= form_with(model: bet, local: true) do |form| %>
+<div class="container mx-auto max-w-6xl bg-white shadow-md rounded-lg p-6">
+    <div class="grid grid-cols-4 gap-4">
+        <%= form.date_field :event_date, class: "border p-2 w-full rounded", placeholder: "Event Date" %>
+        <%= form.text_field :game, class: "border p-2 w-full rounded", placeholder: "Game" %>
+        <%= form.text_field :bet, class: "border p-2 w-full rounded", placeholder: "Bet" %>
+        <%= form.number_field :stake, step: 0.01, class: "border p-2 w-full rounded", placeholder: "Stake" %>
+
+        <%= form.number_field :odd, step: 0.01, class: "border p-2 w-full rounded", placeholder: "Odd" %>
+        <%= form.select :status, Bet::STATUSES, { prompt: "Status" }, class: "border p-2 w-full rounded" %>
+        <%= form.collection_select :book_id, Book.all, :id, :description, { prompt: "Book" }, class: "border p-2 w-full rounded" %>
+        <%= form.collection_select :tipster_id, Tipster.all, :id, :name, { prompt: "Tipster" }, class: "border p-2 w-full rounded" %>
+    </div>
+
+    <div class="mt-6 text-right">
+        <%= form.submit "Save", class: "bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-6 rounded shadow" %>
+    </div>
+</div>
+
+<% end %>

@@ -1,0 +1,27 @@
+<%= turbo_frame_tag bet do %>
+<div class="grid grid-cols-9 gap-4 items-center px-6 py-3 border-b border-gray-200 hover:bg-gray-50 transition text-sm">
+    <div><%= l bet.event_date %></div>
+    <div><%= bet.game %></div>
+    <div><%= bet.bet %></div>
+    <div><%= number_to_currency bet.stake %></div>
+    <div><%= bet.odd %></div>
+    <div><%= bet.status.humanize %></div>
+    <div><%= bet.book.name %></div>
+    <div><%= bet.tipster.name %></div>
+
+    <div class="text-center flex justify-center gap-3">
+        <% if action_name != "show" %>
+        <%= link_to edit_bet_path(bet) do %>
+        <svg class=" inline-block w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"></path>
+        </svg>
+        <% end %>
+        <%= button_to bet_path(bet), method: :delete, form_class: "inline-block ml-4" do %>
+        <svg class="inline-block w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
+        </svg>
+        <% end %>
+        <% end %>
+    </div>
+</div>
+<% end %>

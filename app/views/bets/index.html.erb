@@ -1,0 +1,25 @@
+<div class="w-full container mx-auto mt-16 px-5">
+    <div class="flex justify-between items-center mb-4">
+        <h1 class="font-bold text-4xl">Bets</h1>
+    </div>
+    <%= turbo_frame_tag "new-bet-form", src: new_bet_path %>
+
+    <div class="bg-white shadow-md rounded-lg p-5">
+        <div class="w-full border border-gray-300 rounded-md">
+            <div class="grid grid-cols-9 bg-gray-100 font-bold py-3 px-4 border-b">
+                <div>Event</div>
+                <div>Game</div>
+                <div>Bet</div>
+                <div>Stake</div>
+                <div>Odd</div>
+                <div>Status</div>
+                <div>Book</div>
+                <div>Tipster</div>
+            </div>
+
+            <div id="bets">
+                <%= render @bets %>
+            </div>
+        </div>
+    </div>
+</div>

@@ -10,7 +10,25 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_04_05_090740) do
+ActiveRecord::Schema[8.0].define(version: 2025_04_05_094932) do
+  create_table "bets", charset: "utf8mb3", force: :cascade do |t|
+    t.date "event_date"
+    t.string "game"
+    t.text "bet"
+    t.decimal "stake", precision: 10
+    t.decimal "odd", precision: 10
+    t.string "status"
+    t.bigint "book_id", null: false
+    t.bigint "tipster_id", null: false
+    t.decimal "result", precision: 10
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.bigint "user_id", null: false
+    t.index ["book_id"], name: "index_bets_on_book_id"
+    t.index ["tipster_id"], name: "index_bets_on_tipster_id"
+    t.index ["user_id"], name: "index_bets_on_user_id"
+  end
+
   create_table "books", charset: "utf8mb3", force: :cascade do |t|
     t.string "owner"
     t.string "name"
@@ -59,6 +77,9 @@ ActiveRecord::Schema[8.0].define(version: 2025_04_05_090740) do
     t.index ["email_address"], name: "index_users_on_email_address", unique: true
   end
 
+  add_foreign_key "bets", "books"
+  add_foreign_key "bets", "tipsters"
+  add_foreign_key "bets", "users"
   add_foreign_key "books", "users"
   add_foreign_key "sessions", "users"
   add_foreign_key "transactions", "books"
