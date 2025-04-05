@@ -13,10 +13,10 @@ default: &default
   adapter: mysql2
   encoding: utf8
   pool: 5
-  username: <%= ENV['DB_USERNAME'] %>
-  password: <%= ENV['DB_PASSWORD'] %>
-  host: <%= ENV['DB_HOST'] %>
-  port: 40473
+  username: <%= ENV['MYSQLUSER'] %>
+  password: <%= ENV['MYSQLPASSWORD'] %>
+  host: <%= ENV['MYSQLHOST'] %>
+  port: <%= ENV['MYSQLPORT'] %>
 
 development:
   <<: *default
@@ -53,8 +53,8 @@ production:
   primary: &primary_production
     <<: *default
     database: janza_bet_production
-    username: janza_bet
-    password: <%= ENV['DB_PASSWORD'] %>
+    username: <%= ENV['MYSQLUSER'] %>
+    password: <%= ENV['MYSQLPASSWORD'] %>
   cache:
     <<: *primary_production
     database: janza_bet_production_cache
