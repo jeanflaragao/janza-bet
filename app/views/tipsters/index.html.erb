@@ -1,0 +1,27 @@
+<div class="container mx-auto mt-10 px-5">
+    <h1 class="text-3xl font-bold mb-5">Tipsters</h1>
+    <%= link_to 'New Tipster', new_tipster_path, class: "mb-4 inline-block bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded" %>
+
+    <table class="w-full table-auto border-collapse border border-gray-300 shadow-md rounded-md">
+        <thead class="bg-gray-100">
+            <tr>
+                <th class="px-4 py-2 text-left border-b">Name</th>
+                <th class="px-4 py-2 text-left border-b">Status</th>
+                <th class="px-4 py-2 text-right border-b">Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            <% @tipsters.each do |tipster| %>
+            <tr class="hover:bg-gray-50">
+                <td class="px-4 py-2 border-b"><%= tipster.name %></td>
+                <td class="px-4 py-2 border-b"><%= tipster.status ? "Active" : "Inactive" %></td>
+                <td class="px-4 py-2 border-b text-right">
+                    <%= link_to 'Show', tipster, class: "text-blue-600 hover:underline" %>
+                    <%= link_to 'Edit', edit_tipster_path(tipster), class: "ml-4 text-yellow-600 hover:underline" %>
+                    <%= link_to 'Destroy', tipster, method: :delete, data: { confirm: 'Are you sure?' }, class: "ml-4 text-red-600 hover:underline" %>
+                </td>
+            </tr>
+            <% end %>
+        </tbody>
+    </table>
+</div>

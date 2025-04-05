@@ -1,0 +1,2 @@
+class Tipster < ApplicationRecord
+end
