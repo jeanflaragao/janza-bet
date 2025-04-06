@@ -5,7 +5,7 @@ class BetsController < ApplicationController
     @bets = Current.user.bets.all
   end
 
-  def show end
+  def show; end
 
   def new
     @bet = Bet.new
@@ -13,8 +13,14 @@ class BetsController < ApplicationController
 
   def edit
     @bet = Bet.find(params[:id])
-    render partial: "form_inline", locals: { bet: @bet }
+    render partial: "bet", locals: { bet: @bet }
   end
+
+  def inline_edit
+    @bet = Bet.find(params[:id])
+    render partial: "bet", locals: { bet: @bet }, formats: [:html], status: :ok
+  end
+  
 
   def create
     @bet = Current.user.bets.new(bet_params)
@@ -37,16 +43,15 @@ class BetsController < ApplicationController
     puts @bet.errors.full_messages
   end
 
-  # PATCH/PUT /bets/1 or /bets/1.json
   def update
+    @bet = Bet.find(params[:id])
     if @bet.update(bet_params)
-      flash.now[:notice] = "Bet was successfully updated."
-      render turbo_stream: [
-        turbo_stream.replace(@bet, @bet),
-        turbo_stream.replace("notice", partial: "layouts/flash")
-      ]
+      respond_to do |format|
+        format.turbo_stream { render partial: "bet", locals: { bet: @bet } }
+        format.html { redirect_to bets_path, notice: "Bet updated." }
+      end
     else
-      render :edit, status: :unprocessable_entity
+      render partial: "bet", locals: { bet: @bet }
     end
   end
 
