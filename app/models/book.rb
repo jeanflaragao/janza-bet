@@ -3,6 +3,7 @@ class Book < ApplicationRecord
   validates :owner, presence: true
   validates :name, presence: true
   has_many :transactions, dependent: :destroy
+  has_many :daily_balances, dependent: :destroy
 
   before_validation :set_description
 

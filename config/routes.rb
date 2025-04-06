@@ -33,4 +33,9 @@ Rails.application.routes.draw do
   end
   
   resources :transactions
+  resources :daily_balances do
+    collection do
+      post :add_for_date
+    end
+  end
 end

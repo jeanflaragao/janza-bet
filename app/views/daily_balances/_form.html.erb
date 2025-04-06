@@ -1,0 +1,14 @@
+<%= form_with model: daily_balance, local: true, class: "grid grid-cols-4 gap-2 items-center mb-4" do |f| %>
+<div>
+    <%= f.collection_select :book_id, Book.all, :id, :name, {}, class: "w-full rounded border-gray-300" %>
+</div>
+<div>
+    <%= f.date_field :date, class: "w-full rounded border-gray-300" %>
+</div>
+<div>
+    <%= f.number_field :balance, step: 0.01, class: "w-full rounded border-gray-300" %>
+</div>
+<div>
+    <%= f.submit "💾 Save", class: "bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded transition" %>
+</div>
+<% end %>

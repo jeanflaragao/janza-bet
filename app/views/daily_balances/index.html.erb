@@ -1,0 +1,35 @@
+<div class="max-w-5xl mx-auto px-4 py-8 bg-white rounded shadow">
+
+    <h1 class="text-3xl font-bold mb-6 text-gray-800">Daily Balances</h1>
+
+    <%= form_with url: add_for_date_daily_balances_path, method: :post, class: "grid grid-cols-1 md:grid-cols-4 gap-4 items-end mb-6" do %>
+    <div>
+        <label class="block mb-1 text-sm text-gray-600 font-medium">Generate for Date</label>
+        <%= date_field_tag :date, Date.today, class: "w-full rounded border-gray-300 shadow-sm" %>
+    </div>
+    <div>
+        <%= submit_tag "➕ Generate Balances", class: "w-full bg-blue-600 text-white py-2 px-4 rounded hover:bg-blue-700 transition" %>
+    </div>
+    <% end %>
+
+    <%= form_with url: daily_balances_path, method: :get, local: true, class: "grid grid-cols-1 md:grid-cols-4 gap-4 items-end mb-8" do %>
+    <div>
+        <%= label_tag :date, "Filter by Date", class: "block mb-1 text-sm text-gray-600 font-medium" %>
+        <%= date_field_tag :date, params[:date], class: "w-full rounded border-gray-300 shadow-sm", onchange: "this.form.submit()" %>
+    </div>
+
+    <div>
+        <%= label_tag :book_id, "Filter by Book", class: "block mb-1 text-sm text-gray-600 font-medium" %>
+        <%= select_tag :book_id, options_from_collection_for_select(@books, :id, :name, params[:book_id]), include_blank: true, class: "w-full rounded border-gray-300 shadow-sm", onchange: "this.form.submit()" %>
+    </div>
+
+    <div class="self-end">
+        <%= link_to "✖️ Clear Filters", daily_balances_path, class: "text-gray-500 underline hover:text-gray-700" %>
+    </div>
+    <% end %>
+
+
+    <div class="border rounded">
+        <%= render partial: "daily_balance", collection: @daily_balances, as: :balance %>
+    </div>
+</div>

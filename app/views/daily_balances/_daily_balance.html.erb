@@ -1,0 +1,10 @@
+<div class="grid grid-cols-4 gap-2 items-center py-3 px-2 border-b hover:bg-gray-50 transition text-sm" data-controller="inline-edit" data-action="click->inline-edit#showForm" data-inline-edit-url-value="<%= url_for(daily_balances_path(editing: dom_id(balance))) %>">
+    <div class="font-medium text-gray-700"><%= balance.book.description %></div>
+    <div class="text-gray-600"><%= balance.date %></div>
+    <div class="text-gray-900 font-semibold"><%= number_to_currency(balance.balance) %></div>
+    <div class="flex justify-center gap-2">
+        <%= button_to daily_balance_path(balance), method: :delete, form_class: "inline-block", class: "text-red-600 hover:text-red-800" do %>
+        🗑
+        <% end %>
+    </div>
+</div>
