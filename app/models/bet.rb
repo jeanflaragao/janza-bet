@@ -1,12 +1,12 @@
 class Bet < ApplicationRecord
   belongs_to :book
-  belongs_to :tipster
+  belongs_to :tipster, optional: true
   belongs_to :user
   STATUSES = ["won", "lost", "void", "half won", "half lost"]
 
   before_save :calculate_result
 
-  validates :status, inclusion: { in: STATUSES }
+  validates :status, inclusion: { in: STATUSES }, allow_blank: true
 
   
   private
@@ -23,6 +23,8 @@ class Bet < ApplicationRecord
       self.result = stake + (stake * (odd - 1) / 2)
     when "half lost"
       self.result = stake / 2
+    else
+      self.result ||= 0
     end
   end
 end

@@ -1,25 +1,21 @@
 class BetsController < ApplicationController
   before_action :set_bet, only: %i[ show edit update destroy ]
 
-  # GET /bets or /bets.json
   def index
     @bets = Current.user.bets.all
   end
 
-  # GET /bets/1 or /bets/1.json
-  def show
-  end
+  def show end
 
-  # GET /bets/new
   def new
     @bet = Bet.new
   end
 
-  # GET /bets/1/edit
   def edit
+    @bet = Bet.find(params[:id])
+    render partial: "form_inline", locals: { bet: @bet }
   end
 
-  # POST /bets or /bets.json
   def create
     @bet = Current.user.bets.new(bet_params)
 
@@ -32,8 +28,13 @@ class BetsController < ApplicationController
       turbo_stream.replace("notice", partial: "layouts/flash")
     ]
     else
-      render :new, status: :unprocessable_entity
+      flash.now[:alert] = @bet.errors.full_messages.join(", ")
+      render turbo_stream: [
+      turbo_stream.replace("notice", partial: "layouts/flash")
+    ], status: :unprocessable_entity
     end
+
+    puts @bet.errors.full_messages
   end
 
   # PATCH/PUT /bets/1 or /bets/1.json
@@ -51,7 +52,7 @@ class BetsController < ApplicationController
 
   def destroy
     @bet.destroy
-    flash.now[:notice] = "BBetook was successfully destroyed."
+    flash.now[:notice] = "Bet was successfully destroyed."
     render turbo_stream: [
       turbo_stream.remove(@bet),
       turbo_stream.replace("notice", partial: "layouts/flash")
@@ -61,11 +62,14 @@ class BetsController < ApplicationController
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_bet
-      @bet = Bet.find(params.expect(:id))
+      @bet = Bet.find(params[:id])
     end
+    
 
     # Only allow a list of trusted parameters through.
     def bet_params
-      params.expect(bet: [ :event_date, :game, :bet, :stake, :odd, :status, :book_id, :tipster_id, :result ])
+      params.require(:bet).permit(
+        :event_date, :game, :bet, :stake, :odd, :status, :book_id, :tipster_id
+      )
     end
 end

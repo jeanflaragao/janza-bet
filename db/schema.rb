@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_04_05_094932) do
+ActiveRecord::Schema[8.0].define(version: 2025_04_06_090201) do
   create_table "bets", charset: "utf8mb3", force: :cascade do |t|
     t.date "event_date"
     t.string "game"

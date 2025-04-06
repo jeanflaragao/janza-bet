@@ -6,9 +6,11 @@ export default class extends Controller {
         const node = this.element;
 
         this.animateCSS("rubberBand").then(() => {
-            this.animateCSS("zoomOut").then(() => {
-                node.style.visibility = "hidden";
-            });
+            setTimeout(() => {
+                this.animateCSS("zoomOut").then(() => {
+                    node.style.visibility = "hidden";
+                });
+            }, 10000); // 👈 show message for 5 seconds before zoomOut
         });
     }
 
