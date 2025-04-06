@@ -16,7 +16,7 @@ class TransactionsController < ApplicationController
     if @transaction.save
       flash.now[:notice] = "Transaction was successfully created."
       render turbo_stream: [
-      turbo_stream.prepend("transaction", @transaction),
+      turbo_stream.prepend("transactions", @transaction),
       turbo_stream.replace("form_transaction", partial: "form", locals: { transaction: Transaction.new }
       ),
       turbo_stream.replace("notice", partial: "layouts/flash")
@@ -29,6 +29,15 @@ class TransactionsController < ApplicationController
     end
 
     puts @transaction.errors.full_messages
+  end
+
+  def destroy
+    @transaction.destroy
+    flash.now[:notice] = "Transaction was successfully destroyed."
+    render turbo_stream: [
+      turbo_stream.remove(@transaction),
+      turbo_stream.replace("notice", partial: "layouts/flash")
+    ]
   end
 
   private

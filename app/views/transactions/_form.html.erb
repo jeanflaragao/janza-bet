@@ -1,4 +1,4 @@
-<%= form_with model: transaction, url: transactions_path, local: true do |f| %>
+<%= form_with(model: transaction, local: true) do |f| %>
 <div class="flex flex-wrap gap-4 items-center">
 
     <div><%= f.date_field :date, class: "w-full" %></div>

@@ -1,5 +1,4 @@
 Rails.application.routes.draw do
-  resources :bets
   resources :tipsters
 
   mount LetterOpenerWeb::Engine, at: "/letter_opener" if Rails.env.development?
@@ -26,5 +25,12 @@ Rails.application.routes.draw do
   resources :books do
     resources :transactions, only: [:index, :new, :create]
   end
+
+  resources :bets do
+    member do
+      get :inline_edit
+    end
+  end
+  
   resources :transactions
 end
