@@ -1,7 +1,13 @@
     <%= form_with model: @book, url: books_path, local: true do |f| %>
     <div class="flex flex-wrap gap-4 items-center">
-        <%= f.text_field :owner, placeholder: "Owner", class: "border p-2 w-full rounded" %>
-        <%= f.text_field :name, placeholder: "Book Name", class: "border p-2 w-full rounded" %>
-        <%= f.submit "Create",  class: "bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded font-semibold transition" %>
+        <div>
+            <%= f.text_field :owner, placeholder: "Owner", class: "border p-2 w-full rounded" %>
+        </div>
+        <div>
+            <%= f.text_field :name, placeholder: "Book Name", class: "border p-2 w-full rounded" %>
+        </div>
+        <div>
+            <%= f.submit "Create",  class: "bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded font-semibold transition" %>
+        </div>
     </div>
     <% end %>
