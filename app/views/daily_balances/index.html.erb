@@ -2,6 +2,7 @@
 
     <h1 class="text-3xl font-bold mb-6 text-gray-800">Daily Balances</h1>
 
+    <!-- Gerar Balances -->
     <%= form_with url: add_for_date_daily_balances_path, method: :post, class: "grid grid-cols-1 md:grid-cols-4 gap-4 items-end mb-6" do %>
     <div>
         <label class="block mb-1 text-sm text-gray-600 font-medium">Generate for Date</label>
@@ -12,6 +13,7 @@
     </div>
     <% end %>
 
+    <!-- Filtros -->
     <%= form_with url: daily_balances_path, method: :get, local: true, class: "grid grid-cols-1 md:grid-cols-4 gap-4 items-end mb-8" do %>
     <div>
         <%= label_tag :date, "Filter by Date", class: "block mb-1 text-sm text-gray-600 font-medium" %>
@@ -28,8 +30,9 @@
     </div>
     <% end %>
 
-
-    <div class="border rounded">
+    <!-- Tabela -->
+    <div class="border rounded divide-y">
         <%= render partial: "daily_balance", collection: @daily_balances, as: :balance %>
     </div>
+
 </div>

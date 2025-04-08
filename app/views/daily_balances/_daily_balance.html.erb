@@ -7,7 +7,8 @@
 <div class="text-gray-700 font-medium"><%= balance.book.name %></div>
 <div class="text-gray-500"><%= balance.date %></div>
 <div>
-    <%= f.number_field :balance, step: 0.01, class: "w-full px-3 py-1.5 rounded border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-400" %>
+    <%= f.number_field :balance, step: 0.01,
+              class: "w-full px-3 py-1.5 rounded border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-400" %>
 </div>
 <div class="flex justify-center gap-2">
     <%= f.submit "💾", class: "px-3 py-1 text-sm bg-green-500 hover:bg-green-600 text-white rounded shadow-sm" %>
