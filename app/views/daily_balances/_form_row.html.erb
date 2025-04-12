@@ -1,0 +1,11 @@
+<tr>
+    <td class="px-4 py-2">
+        <%= turbo_frame_tag dom_id(balance) do %>
+        <%= form_with model: balance, url: daily_balance_path(balance), method: :patch do |f| %>
+        <%= f.number_field :balance, class: "border px-2 py-1 rounded", step: 0.01 %>
+        <%= f.submit "Save", class: "ml-2 text-sm text-green-600 hover:underline" %>
+        <% end %>
+        <% end %>
+    </td>
+    <td></td>
+</tr>

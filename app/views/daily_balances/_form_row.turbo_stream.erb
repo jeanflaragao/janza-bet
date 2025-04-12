@@ -1,0 +1,3 @@
+<%= turbo_stream.replace "balance_#{balance.id}" do %>
+  <%= render partial: "form_row", locals: { balance: balance } %>
+<% end %>

@@ -33,9 +33,16 @@ Rails.application.routes.draw do
   end
   
   resources :transactions
-  resources :daily_balances do
+  resources :daily_balances, only: [:index, :edit, :update] do
     collection do
       post :add_for_date
+      get :edit_by_date    
+      patch :update_by_date 
+      # para o inline edit funcionar
+      get "/daily_balances/:id/edit", to: "daily_balances#edit", as: :edit_daily_balance
+
     end
   end
+  
+  
 end

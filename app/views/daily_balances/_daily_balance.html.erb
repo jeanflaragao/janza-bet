@@ -15,7 +15,9 @@
 </div>
 <% end %>
 <% else %>
-<div class="grid grid-cols-4 gap-4 items-center px-4 py-3 border-b hover:bg-gray-100 transition rounded-lg cursor-pointer text-sm" data-controller="inline-edit" data-action="click->inline-edit#showForm" data-inline-edit-url-value="<%= url_for(daily_balances_path(editing: dom_id(balance))) %>">
+<% current_filters = { editing: dom_id(balance), date: params[:date], book_id: params[:book_id] } %>
+<div class="grid grid-cols-4 gap-4 items-center px-4 py-3 border-b hover:bg-gray-100 transition rounded-lg cursor-pointer text-sm" data-controller="inline-edit" data-action="click->inline-edit#showForm" data-inline-edit-url-value="<%= url_for(daily_balances_path(current_filters)) %>">
+
 
     <div class="text-gray-800 font-medium"><%= balance.book.name %></div>
     <div class="text-gray-500"><%= balance.date %></div>

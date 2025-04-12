@@ -1,0 +1,17 @@
+<h1 class="text-2xl font-bold mb-6 text-gray-800">Edit Balances for <%= @date %></h1>
+
+<table class="w-full border rounded text-sm">
+    <thead class="bg-gray-100 text-left">
+        <tr>
+            <th class="px-4 py-2">Book</th>
+            <th class="px-4 py-2">Amount</th>
+        </tr>
+    </thead>
+    <tbody>
+        <% @balances.each do |balance| %>
+        <turbo-frame id="balance_<%= balance.id %>">
+            <%= render partial: "balance_row", locals: { balance: balance } %>
+        </turbo-frame>
+        <% end %>
+    </tbody>
+</table>

@@ -1,38 +1,33 @@
-<div class="max-w-5xl mx-auto px-4 py-8 bg-white rounded shadow">
-
-    <h1 class="text-3xl font-bold mb-6 text-gray-800">Daily Balances</h1>
-
-    <!-- Gerar Balances -->
-    <%= form_with url: add_for_date_daily_balances_path, method: :post, class: "grid grid-cols-1 md:grid-cols-4 gap-4 items-end mb-6" do %>
-    <div>
-        <label class="block mb-1 text-sm text-gray-600 font-medium">Generate for Date</label>
-        <%= date_field_tag :date, Date.today, class: "w-full rounded border-gray-300 shadow-sm" %>
+<div class="max-w-4xl mx-auto px-4 py-8 bg-white rounded shadow">
+    <%= form_with url: add_for_date_daily_balances_path, method: :post, class: "mb-6 flex items-end gap-4" do %>
+    <div class="rounded border-gray-300 shadow-sm">
+        <%= date_field_tag :date, Date.today %>
     </div>
     <div>
-        <%= submit_tag "➕ Generate Balances", class: "w-full bg-blue-600 text-white py-2 px-4 rounded hover:bg-blue-700 transition" %>
+        <%= submit_tag "Generate", class: "bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition" %>
     </div>
     <% end %>
 
-    <!-- Filtros -->
-    <%= form_with url: daily_balances_path, method: :get, local: true, class: "grid grid-cols-1 md:grid-cols-4 gap-4 items-end mb-8" do %>
-    <div>
-        <%= label_tag :date, "Filter by Date", class: "block mb-1 text-sm text-gray-600 font-medium" %>
-        <%= date_field_tag :date, params[:date], class: "w-full rounded border-gray-300 shadow-sm", onchange: "this.form.submit()" %>
-    </div>
-
-    <div>
-        <%= label_tag :book_id, "Filter by Book", class: "block mb-1 text-sm text-gray-600 font-medium" %>
-        <%= select_tag :book_id, options_from_collection_for_select(@books, :id, :name, params[:book_id]), include_blank: true, class: "w-full rounded border-gray-300 shadow-sm", onchange: "this.form.submit()" %>
-    </div>
-
-    <div class="self-end">
-        <%= link_to "✖️ Clear Filters", daily_balances_path, class: "text-gray-500 underline hover:text-gray-700" %>
-    </div>
-    <% end %>
-
-    <!-- Tabela -->
-    <div class="border rounded divide-y">
-        <%= render partial: "daily_balance", collection: @daily_balances, as: :balance %>
-    </div>
-
+    <h2 class="text-xl font-semibold mb-2 text-gray-800">Daily Balance Summary</h2>
+    <table class="w-full border rounded shadow-sm text-sm">
+        <thead class="bg-gray-100 text-gray-700">
+            <tr>
+                <th class="text-left px-4 py-2">Date</th>
+                <th class="text-left px-4 py-2">Total Books</th>
+                <th class="text-left px-4 py-2">Books w/ Zero Balance</th>
+            </tr>
+        </thead>
+        <tbody>
+            <% @date_summaries.each do |summary| %>
+            <tr class="border-t hover:bg-gray-50">
+                <td class="px-4 py-2"><%= summary[:date] %></td>
+                <td class="px-4 py-2"><%= summary[:total_books] %></td>
+                <td class="px-4 py-2 text-red-500"><%= summary[:books_with_zero_balance] %></td>
+                <td class="px-4 py-2">
+                    <%= link_to "✏️", edit_by_date_daily_balances_path(date: summary[:date]), class: "text-blue-600 hover:underline" %>
+                </td>
+            </tr>
+            <% end %>
+        </tbody>
+    </table>
 </div>

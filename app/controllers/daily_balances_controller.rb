@@ -3,42 +3,36 @@ class DailyBalancesController < ApplicationController
   include ActionView::RecordIdentifier
 
   def index
-    @books = Book.all
-    params[:date] ||= Date.today.to_s
-
-    @daily_balances = DailyBalance.all
-    @daily_balances = @daily_balances.where(date: params[:date]) if params[:date].present?
-    @daily_balances = @daily_balances.where(book_id: params[:book_id]) if params[:book_id].present?
-
-    if params[:editing]
-      @editing_balance = @daily_balances.find { |b| dom_id(b) == params[:editing] }
-
-      if @editing_balance
-        render partial: "daily_balance", locals: { balance: @editing_balance }, layout: false
-        return
-      end
+    @dates = DailyBalance.select(:date).distinct.order(date: :desc)
+                         .map(&:date)
+  
+    @date_summaries = @dates.map do |date|
+      balances = DailyBalance.where(date: date)
+      {
+        date: date,
+        total_books: balances.count,
+        books_with_zero_balance: balances.where(balance: 0.0).count
+      }
     end
   end
 
+  def edit_by_date
+    @date = params[:date]
+    @balances = DailyBalance.includes(:book).where(date: @date).order("books.name")
+  end
+  
+  def edit
+    @balance = DailyBalance.find(params[:id])
+    render partial: "form_row", locals: { balance: @balance }
+  end
+  
   def update
     @balance = DailyBalance.find(params[:id])
-
-    if @balance.update(daily_balance_params)
-      respond_to do |format|
-        format.turbo_stream do
-          render turbo_stream: turbo_stream.replace(dom_id(@balance), partial: "daily_balance", locals: { balance: @balance })
-        end
-        format.html do
-          redirect_to daily_balances_path, notice: "Balance updated."
-        end
-      end
+    if @balance.update(balance_params)
+      render partial: "balance_row", locals: { balance: @balance }
     else
-      render partial: "daily_balance", locals: { balance: @balance }
+      render partial: "form_row", locals: { balance: @balance }
     end
-  end
-
-  def edit
-    redirect_to daily_balances_path(editing: dom_id(@daily_balance))
   end
 
   def destroy
@@ -71,5 +65,9 @@ class DailyBalancesController < ApplicationController
 
   def daily_balance_params
     params.require(:daily_balance).permit(:date, :balance, :book_id)
+  end
+
+  def balance_params
+    params.require(:daily_balance).permit(:balance)
   end
 end
