@@ -1,6 +1,6 @@
 class TransactionsController < ApplicationController
   def index
-    @transactions = Transaction.includes(:book).order(date: :desc)
+    @transactions = Transaction.includes(:book).order(date: :desc).page(params[:page]).per(25)
   end
 
   def edit
