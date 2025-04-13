@@ -6,15 +6,15 @@
     <div class="text-gray-500 italic"><%= book.description %></div>
 
     <!-- Deposit (not positive) = warning/orange -->
-    <div>
-        <span class="inline-block px-3 py-1 text-xs font-semibold rounded-full bg-yellow-100 text-yellow-800">
+    <div class="flex justify-end">
+        <span class="inline-block px-3 py-1 text-xs font-semibold rounded-full bg-yellow-100 text-yellow-800 text-right">
             <%= number_to_currency(book.total_deposit) %>
         </span>
     </div>
 
     <!-- Withdraw (positive) = green -->
-    <div>
-        <span class="inline-block px-3 py-1 text-xs font-semibold rounded-full bg-green-100 text-green-700">
+    <div class="flex justify-end">
+        <span class="inline-block px-3 py-1 text-xs font-semibold rounded-full bg-green-100 text-green-700 text-right">
             <%= number_to_currency(book.total_withdraw.abs) %>
         </span>
     </div>
@@ -22,8 +22,8 @@
     <!-- Balance = green if > deposit, else gray -->
     <% balance = book.last_daily_balance || 0 %>
     <% balance_class = balance > book.total_deposit ? "bg-green-100 text-green-700" : "bg-gray-100 text-gray-700" %>
-    <div>
-        <span class="inline-block px-3 py-1 text-xs font-semibold rounded-full <%= balance_class %>">
+    <div class="flex justify-end">
+        <span class="inline-block px-3 py-1 text-xs font-semibold rounded-full text-right <%= balance_class %>">
             <%= number_to_currency(balance) %>
         </span>
     </div>
