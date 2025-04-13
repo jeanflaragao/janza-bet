@@ -3,9 +3,8 @@ class DailyBalancesController < ApplicationController
   include ActionView::RecordIdentifier
 
   def index
-    @dates = DailyBalance.select(:date).distinct.order(date: :desc)
-                         .map(&:date)
-  
+    @dates = DailyBalance.select(:date).distinct.order(date: :desc).map(&:date)
+
     @date_summaries = @dates.map do |date|
       balances = DailyBalance.where(date: date)
       {
@@ -20,18 +19,34 @@ class DailyBalancesController < ApplicationController
     @date = params[:date]
     @balances = DailyBalance.includes(:book).where(date: @date).order("books.name")
   end
-  
+
   def edit
-    @balance = DailyBalance.find(params[:id])
-    render partial: "form_row", locals: { balance: @balance }
+    respond_to do |format|
+      format.turbo_stream do
+        render partial: "form_row", locals: { balance: @daily_balance }
+      end
+      format.html do
+        render partial: "form_row", locals: { balance: @daily_balance }
+      end
+    end
   end
-  
+
   def update
-    @balance = DailyBalance.find(params[:id])
-    if @balance.update(balance_params)
-      render partial: "balance_row", locals: { balance: @balance }
+    if @daily_balance.update(balance_params)
+      flash.now[:notice] = "Balance was successfully updated."
+      render turbo_stream: [
+        turbo_stream.replace(@daily_balance, partial: "daily_balances/balance_row", locals: { balance: @daily_balance }),
+        turbo_stream.replace("notice", partial: "layouts/flash")
+      ]
     else
-      render partial: "form_row", locals: { balance: @balance }
+      respond_to do |format|
+        format.turbo_stream do
+          render partial: "form_row", locals: { balance: @daily_balance }
+        end
+        format.html do
+          render partial: "form_row", locals: { balance: @daily_balance }
+        end
+      end
     end
   end
 
@@ -61,10 +76,6 @@ class DailyBalancesController < ApplicationController
 
   def set_daily_balance
     @daily_balance = DailyBalance.find(params[:id])
-  end
-
-  def daily_balance_params
-    params.require(:daily_balance).permit(:date, :balance, :book_id)
   end
 
   def balance_params
