@@ -10,7 +10,8 @@ class DailyBalancesController < ApplicationController
       {
         date: date,
         total_books: balances.count,
-        books_with_zero_balance: balances.where(balance: 0.0).count
+        books_with_zero_balance: balances.where(balance: 0.0).count,
+        total_balance: balances.sum(:balance)
       }
     end
   end
