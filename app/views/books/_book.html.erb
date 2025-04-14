@@ -43,6 +43,55 @@
         </svg>
         <% end %>
         <% end %>
+
+        <div data-controller="modal">
+            <button data-action="modal#open" class="text-gray-500 hover:text-blue-600 transition-colors" aria-label="View transactions">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M2.036 12.322a1.012 1.012 0 010-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178z" />
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                </svg>
+            </button>
+            <dialog data-modal-target="dialog" data-action="click->modal#clickOutside" class="w-full max-w-2xl rounded-lg shadow-xl backdrop:bg-black/50">
+                <div class="bg-white p-6 rounded-lg">
+                    <div class="flex justify-between items-center mb-4">
+                        <h3 class="text-lg font-bold">
+                            Transactions for <%= book.description %>
+                        </h3>
+                        <button data-action="modal#close" class="text-gray-500 hover:text-gray-700">
+                            ✕
+                        </button>
+                    </div>
+
+                    <div class="overflow-y-auto max-h-[70vh]">
+                        <table class="min-w-full">
+                            <thead>
+                                <tr class="border-b">
+                                    <th class="text-left py-2">Date</th>
+                                    <th class="text-left py-2">Type</th>
+                                    <th class="text-right py-2">Amount</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <% book.transactions.order(date: :desc).each do |txn| %>
+                                <tr class="border-b">
+                                    <td class="py-2"><%= txn.date.strftime("%d/%m/%Y") %></td>
+                                    <td class="py-2">
+                                        <span class="px-2 py-1 text-xs rounded-full 
+              <%= txn.transaction_type == 'deposit' ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800' %>">
+                                            <%= txn.transaction_type.titleize %>
+                                        </span>
+                                    </td>
+                                    <td class="py-2 text-right">
+                                        <%= number_to_currency(txn.amount) %>
+                                    </td>
+                                </tr>
+                                <% end %>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </dialog>
+        </div>
     </div>
 </div>
 <% end %>
