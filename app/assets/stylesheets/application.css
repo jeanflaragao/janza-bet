@@ -17,3 +17,12 @@ dialog {
         opacity: 1;
     }
 }
+
+.transaction-form input[type="number"] {
+    -moz-appearance: textfield;
+}
+
+.transaction-form input::-webkit-outer-spin-button,
+.transaction-form input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+}
