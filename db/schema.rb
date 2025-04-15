@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_04_06_203003) do
+ActiveRecord::Schema[8.0].define(version: 2025_04_15_211234) do
   create_table "bets", charset: "utf8mb3", force: :cascade do |t|
     t.date "event_date"
     t.string "game"
@@ -36,6 +36,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_04_06_203003) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.bigint "user_id", null: false
+    t.boolean "inactive", default: false, null: false
     t.index ["user_id"], name: "index_books_on_user_id"
   end
 

@@ -7,6 +7,9 @@ class Book < ApplicationRecord
   validates :owner, presence: true
   validates :name, presence: true
 
+  scope :active, -> { where(inactive: false) }
+  scope :inactive, -> { where(inactive: true) }
+  
   before_validation :set_description
 
   def total_deposit
