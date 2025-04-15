@@ -64,9 +64,9 @@ class DailyBalancesController < ApplicationController
       return
     end
 
-    Book.find_each do |book|
+    Book.active.find_each do |book|
       DailyBalance.find_or_create_by(book: book, date: date) do |balance|
-        balance.balance = 0.0
+        balance.balance = book.last_daily_balance || 0.0  # Use last balance if available
       end
     end
 
