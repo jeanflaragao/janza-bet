@@ -1,3 +1,12 @@
+<%# Define the colors based on profit %>
+<% text_color = @profit_total >= 0 ? 'purple' : 'orange' %>
+
+<div class="flex justify-end gap-4 mb-4">
+    <%= link_to "📅 This Month", root_path(filter: "month"), class: "px-4 py-2 rounded bg-blue-100 hover:bg-blue-200 text-blue-800" %>
+    <%= link_to "🗓️ Semester", root_path(filter: "semester"), class: "px-4 py-2 rounded bg-green-100 hover:bg-green-200 text-green-800" %>
+    <%= link_to "🌎 All Time", root_path(filter: "all_time"), class: "px-4 py-2 rounded bg-purple-100 hover:bg-purple-200 text-purple-800" %>
+</div>
+
 <div class="flex flex-wrap gap-4 mb-6 pt-4">
     <div class="flex-1 min-w-[200px]">
         <div class="bg-red-50 rounded-lg p-4">
@@ -7,6 +16,7 @@
             </div>
         </div>
     </div>
+
     <div class="flex-1 min-w-[200px]">
         <div class="bg-blue-50 rounded-lg p-4">
             <div class="text-sm font-medium text-blue-700">Withdrawals</div>
@@ -15,6 +25,7 @@
             </div>
         </div>
     </div>
+
     <div class="flex-1 min-w-[200px]">
         <div class="bg-green-50 rounded-lg p-4">
             <div class="text-sm font-medium text-green-700">Current Balance</div>
@@ -25,22 +36,21 @@
     </div>
 
     <div class="flex-1 min-w-[200px]">
-        <div class="bg-<%= @profit_total >= 0 ? '  ' : 'orange' %>-50 rounded-lg p-4">
-            <div class="text-sm font-medium text-<%= @profit_total >= 0 ? 'purple' : 'orange' %>-700">
+        <div class="bg-<%= text_color %>-50 rounded-lg p-4">
+            <div class="text-sm font-medium text-<%= text_color %>-700">
                 Profit
             </div>
-            <div class="text-2xl font-bold text-<%= @profit_total >= 0 ? 'purple' : 'orange' %>-900 mt-1">
+            <div class="text-2xl font-bold text-<%= text_color %>-900 mt-1">
                 <%= number_to_currency(@profit_total.abs) %>
             </div>
         </div>
     </div>
 </div>
 
-
 <div class="bg-white p-4 shadow rounded mb-6">
     <% if @daily_balances.present? %>
     <%= line_chart @daily_balances.group_by_day(:date).sum(:balance), library: { height: "300px" } %>
     <% else %>
-    <p class="text-gray-500">No balance data available for this month.</p>
+    <p class="text-gray-500">No balance data available.</p>
     <% end %>
 </div>
