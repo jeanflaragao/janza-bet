@@ -17,13 +17,14 @@ class HomeController < ApplicationController
 
     date_range = start_date && end_date ? (start_date..end_date) : nil
 
-    transactions = Transaction.all
+    transactions = Transaction.joins(:book).where(books: { user_id: current_user.id })
+
     transactions = transactions.where(date: date_range) if date_range
 
     @total_deposits = transactions.where(transaction_type: 'deposit').sum(:amount)
     @total_withdrawals = transactions.where(transaction_type: 'withdraw').sum(:amount)
 
-    daily_balances = DailyBalance.all
+    daily_balances = DailyBalance.joins(:book).where(books: { user_id: current_user.id })
     daily_balances = daily_balances.where(date: date_range) if date_range
     last_date = daily_balances.maximum(:date)
 

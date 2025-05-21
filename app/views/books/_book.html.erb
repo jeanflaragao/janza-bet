@@ -2,7 +2,15 @@
 <div class="grid grid-cols-2 md:grid-cols-9 gap-4 items-center px-6 py-4 border-b border-gray-100 hover:bg-gray-50 text-sm transition-all duration-150 ease-in-out">
 
     <div class="text-gray-800 font-medium"><%= book.owner %></div>
-    <div class="text-gray-800"><%= book.name %></div>
+    <div class="text-gray-800 font-medium">
+        <div class="text-sm text-gray-600 truncate max-w-[180px]" title="<%= book.name %>">
+            <%= book.name %>
+        </div>
+        <div class="text-xs text-gray-400 mt-1">
+            Book ID: <%= book.id %>
+        </div>
+    </div>
+
     <div class="text-gray-500 italic"><%= book.description %></div>
     <div class="flex justify-start">
         <% if book.inactive? %>

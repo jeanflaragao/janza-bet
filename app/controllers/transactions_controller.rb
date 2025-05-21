@@ -1,6 +1,6 @@
 class TransactionsController < ApplicationController
   def index
-    @transactions = Transaction.includes(:book).order(date: :desc).page(params[:page]).per(25)
+    @transactions =  Transaction.joins(:book).where(books: { user_id: current_user.id }).order(date: :desc).page(params[:page]).per(25)
   end
 
   def edit
