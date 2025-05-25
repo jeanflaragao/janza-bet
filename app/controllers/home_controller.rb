@@ -38,12 +38,26 @@ class HomeController < ApplicationController
 
     @daily_balances = daily_balances
 
-    @balances_by_book = Book.where(user_id: current_user.id)
-                          .joins(:daily_balances)
-                          .where('daily_balances.date = ?', last_date || Date.current)
-                          .group('books.description')
-                          .having('SUM(daily_balances.balance) > 0')
-                          .sum('daily_balances.balance')
+    raw_balances = Book.where(user_id: current_user.id)
+                   .joins(:daily_balances)
+                   .where('daily_balances.date = ?', last_date || Date.current)
+                   .where('daily_balances.balance > 0')
+                   .pluck('books.description', 'daily_balances.balance')
+
+    # Separate high-balance items
+    @balances_by_book = {}
+    other_total = 0
+
+    raw_balances.each do |description, balance|
+      if balance > 1000
+        @balances_by_book[description] = balance
+      else
+        other_total += balance
+      end
+    end
+
+    # Add "Other" category if needed
+    @balances_by_book["Other"] = other_total if other_total > 0
 
     @daily_balances_per_book = DailyBalance.joins(:book)
                                         .where(books: { user_id: current_user.id })

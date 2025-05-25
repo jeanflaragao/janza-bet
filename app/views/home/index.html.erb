@@ -71,7 +71,7 @@
       @daily_balances_per_book.map { |book_id, balances|
         book = Book.find(book_id)
         {
-          name: book.name,
+          name: book.description,
           data: balances.transform_values(&:balance)
         }
       },
