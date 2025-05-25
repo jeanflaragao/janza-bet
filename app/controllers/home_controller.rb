@@ -37,5 +37,19 @@ class HomeController < ApplicationController
     @profit_total = balance_profit > 0 ? balance_profit - @total_deposits : 0 
 
     @daily_balances = daily_balances
+
+    @balances_by_book = Book.where(user_id: current_user.id)
+                          .joins(:daily_balances)
+                          .where('daily_balances.date = ?', last_date || Date.current)
+                          .group('books.description')
+                          .having('SUM(daily_balances.balance) > 0')
+                          .sum('daily_balances.balance')
+
+    @daily_balances_per_book = DailyBalance.joins(:book)
+                                        .where(books: { user_id: current_user.id })
+                                        .where(date: date_range)
+                                        .order(:date)
+                                        .group_by(&:book_id)
+                                        .transform_values { |balances| balances.index_by(&:date)}
   end
 end
