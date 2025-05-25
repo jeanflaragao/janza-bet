@@ -1,17 +1,17 @@
 <%= form_with model: @book do |f| %>
 <div class="flex flex-wrap gap-4 items-center">
     <div>
-        <%= f.text_field :owner, placeholder: "Owner", class: "border p-2 w-full rounded" %>
+        <%= f.text_field :owner, placeholder: "Dono", class: "border p-2 w-full rounded" %>
     </div>
     <div>
         <%= f.text_field :name, placeholder: "Book Name", class: "border p-2 w-full rounded" %>
     </div>
     <div class="flex items-center gap-2">
         <%= f.check_box :inactive, class: "h-4 w-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500" %>
-        <%= f.label :inactive, "Mark as inactive", class: "text-sm text-gray-700" %>
+        <%= f.label :inactive, "Marcar como inativada", class: "text-sm text-gray-700" %>
     </div>
     <div>
-        <%= f.submit @book.new_record? ? "Create" : "Update",  
+        <%= f.submit @book.new_record? ? "Criar" : "Atualizar",  
                    class: "bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded font-semibold transition" %>
     </div>
 </div>

@@ -3,10 +3,17 @@ class DailyBalancesController < ApplicationController
   include ActionView::RecordIdentifier
 
   def index
-    @dates = DailyBalance.select(:date).distinct.order(date: :desc).map(&:date)
+    # Get distinct dates from the current user's books' daily balances
+    @dates = DailyBalance.joins(:book)
+                         .where(books: { user_id: current_user.id })
+                         .select(:date)
+                         .distinct
+                         .order(date: :desc)
+                         .map(&:date)
 
     @date_summaries = @dates.map do |date|
-      balances = DailyBalance.where(date: date)
+      balances = DailyBalance.joins(:book)
+                            .where(date: date, books: { user_id: current_user.id })
       {
         date: date,
         total_books: balances.count,
@@ -18,7 +25,10 @@ class DailyBalancesController < ApplicationController
 
   def edit_by_date
     @date = params[:date]
-    @balances = DailyBalance.includes(:book).where(date: @date).order("books.name")
+    @balances = DailyBalance.joins(:book)
+                           .includes(:book)
+                           .where(date: @date, books: { user_id: current_user.id })
+                           .order("books.name")
   end
 
   def edit
@@ -64,9 +74,9 @@ class DailyBalancesController < ApplicationController
       return
     end
 
-    Book.active.find_each do |book|
+    current_user.books.active.find_each do |book|
       DailyBalance.find_or_create_by(book: book, date: date) do |balance|
-        balance.balance = book.last_daily_balance || 0.0  # Use last balance if available
+        balance.balance = book.last_daily_balance || 0.0
       end
     end
 
@@ -76,7 +86,10 @@ class DailyBalancesController < ApplicationController
   private
 
   def set_daily_balance
-    @daily_balance = DailyBalance.find(params[:id])
+    @daily_balance = DailyBalance.joins(:book)
+                                .where(id: params[:id], books: { user_id: current_user.id })
+                                .first
+    redirect_to daily_balances_path, alert: "Balance not found." unless @daily_balance
   end
 
   def balance_params

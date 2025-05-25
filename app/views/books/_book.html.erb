@@ -7,7 +7,7 @@
             <%= book.name %>
         </div>
         <div class="text-xs text-gray-400 mt-1">
-            Book ID: <%= book.id %>
+            Casa ID: <%= book.id %>
         </div>
     </div>
 
@@ -15,11 +15,11 @@
     <div class="flex justify-start">
         <% if book.inactive? %>
         <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-800">
-            Inactive
+            Ativo
         </span>
         <% else %>
         <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
-            Active
+            Inativada
         </span>
         <% end %>
     </div>
@@ -93,9 +93,9 @@
                         <table class="min-w-full">
                             <thead>
                                 <tr class="border-b">
-                                    <th class="text-left py-2">Date</th>
-                                    <th class="text-left py-2">Type</th>
-                                    <th class="text-right py-2">Amount</th>
+                                    <th class="text-left py-2">Data</th>
+                                    <th class="text-left py-2">Tipo</th>
+                                    <th class="text-right py-2">Valor</th>
                                 </tr>
                             </thead>
                             <tbody>
