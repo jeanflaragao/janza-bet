@@ -63,31 +63,4 @@
     <p class="text-gray-500">No account balance data available.</p>
     <% end %>
 </div>
-
-<div class="bg-white p-4 shadow rounded mb-6">
-    <h3 class="text-lg font-medium mb-4">Daily Balances by Book</h3>
-    <% if @daily_balances_per_book.any? %>
-    <%= line_chart(
-      @daily_balances_per_book.map { |book_id, balances|
-        book = Book.find(book_id)
-        {
-          name: book.description,
-          data: balances.transform_values(&:balance)
-        }
-      },
-      library: {
-        height: "400px",
-        curve: false,
-        tooltip: {
-          valuePrefix: "$",
-          valueDecimals: 2
-        },
-        xAxis: {
-          type: 'datetime'
-        }
-      }
-    ) %>
-    <% else %>
-    <p class="text-gray-500">No book balance data available.</p>
-    <% end %>
 </div>

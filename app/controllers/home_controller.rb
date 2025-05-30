@@ -59,11 +59,13 @@ class HomeController < ApplicationController
     # Add "Other" category if needed
     @balances_by_book["Other"] = other_total if other_total > 0
 
-    @daily_balances_per_book = DailyBalance.joins(:book)
-                                        .where(books: { user_id: current_user.id })
-                                        .where(date: date_range)
-                                        .order(:date)
-                                        .group_by(&:book_id)
-                                        .transform_values { |balances| balances.index_by(&:date)}
+    
+    #@daily_balances_per_book = DailyBalance.joins(:book)
+    #                                    .where(books: { user_id: current_user.id })
+    #                                    .where(date: date_range)
+    #                                    .order(:date)
+    #                                    .group_by(&:book_id)
+    #                                    .transform_values { |balances| balances.index_by(&:date)}
+
   end
 end
