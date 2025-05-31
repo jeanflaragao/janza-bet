@@ -35,4 +35,13 @@ class Bank < ApplicationRecord
   def total_profit=(value)
     @total_profit = value
   end
+
+    def cash_money
+    @cash_money
+  end
+
+  def cash_money=(value)
+    @cash_money = value
+  end
+  
 end
