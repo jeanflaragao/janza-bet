@@ -10,7 +10,25 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_04_15_211234) do
+ActiveRecord::Schema[8.0].define(version: 2025_05_31_091707) do
+  create_table "bank_balances", charset: "utf8mb3", force: :cascade do |t|
+    t.date "month"
+    t.decimal "bank_value", precision: 10
+    t.bigint "user_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["user_id"], name: "index_bank_balances_on_user_id"
+  end
+
+  create_table "banks", charset: "utf8mb3", force: :cascade do |t|
+    t.date "month"
+    t.decimal "bank_value", precision: 10
+    t.bigint "user_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["user_id"], name: "index_banks_on_user_id"
+  end
+
   create_table "bets", charset: "utf8mb3", force: :cascade do |t|
     t.date "event_date"
     t.string "game"
@@ -19,7 +37,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_04_15_211234) do
     t.decimal "odd", precision: 10
     t.string "status"
     t.bigint "book_id", null: false
-    t.bigint "tipster_id"
+    t.bigint "tipster_id", null: false
     t.decimal "result", precision: 10
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
@@ -87,6 +105,8 @@ ActiveRecord::Schema[8.0].define(version: 2025_04_15_211234) do
     t.index ["email_address"], name: "index_users_on_email_address", unique: true
   end
 
+  add_foreign_key "bank_balances", "users"
+  add_foreign_key "banks", "users"
   add_foreign_key "bets", "books"
   add_foreign_key "bets", "tipsters"
   add_foreign_key "bets", "users"

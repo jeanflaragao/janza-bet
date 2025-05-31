@@ -1,0 +1,45 @@
+<%= form_with(model: bank, data: { turbo_frame: "_top" }, class: "space-y-6") do |form| %>
+<!-- Month Field with Improved Date Picker -->
+<div class="grid grid-cols-1 gap-6 sm:grid-cols-2">
+    <div>
+        <%= form.label :month, "Mês", class: "block text-sm font-medium text-gray-700 mb-1" %>
+        <div class="relative rounded-md shadow-sm">
+            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                <svg class="h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                </svg>
+            </div>
+            <%= form.date_field :month, 
+              class: "focus:ring-blue-500 focus:border-blue-500 block w-full pl-10 pr-3 py-2.5 border-gray-300 rounded-md shadow-sm",
+              placeholder: "Selecione o mês" %>
+        </div>
+        <p class="mt-1 text-xs text-gray-500">Selecione o mês de referência</p>
+    </div>
+
+    <!-- Bank Value Field with Currency Prefix -->
+    <div>
+        <%= form.label :bank_value, "Valor", class: "block text-sm font-medium text-gray-700 mb-1" %>
+        <div class="relative rounded-md shadow-sm">
+            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                <span class="text-gray-500 sm:text-sm">R$</span>
+            </div>
+            <%= form.number_field :bank_value, 
+              step: 0.01,
+              class: "focus:ring-blue-500 focus:border-blue-500 block w-full pl-12 pr-3 py-2.5 border-gray-300 rounded-md shadow-sm",
+              placeholder: "0,00" %>
+        </div>
+        <p class="mt-1 text-xs text-gray-500">Digite o valor com centavos</p>
+    </div>
+</div>
+<!-- Form actions -->
+<div class="flex justify-end space-x-3 pt-4 border-t border-gray-200">
+    <% if bank.new_record? %>
+    <button type="submit" name="commit_and_return" value="true" class="inline-flex items-center px-4 py-2.5 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+        <svg class="-ml-1 mr-2 h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+        </svg>
+        Salvar e voltar para Bancas
+    </button>
+    <% end %>
+</div>
+<% end %>

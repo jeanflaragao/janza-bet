@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  resources :banks
   resources :tipsters
 
   mount LetterOpenerWeb::Engine, at: "/letter_opener" if Rails.env.development?
@@ -41,5 +42,6 @@ Rails.application.routes.draw do
     end
   end
   
+  resources :banks
   
 end
