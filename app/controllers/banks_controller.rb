@@ -107,57 +107,71 @@ class BanksController < ApplicationController
     end
 
     def calculate_cumulative_profits(date_range, user)
-  cumulative_data = []
-  cumulative_profit = 0
-  initial_balance = DailyBalance.joins(:book)
-                      .where(books: { user_id: user.id })
-                      .where(date: @bank.month.beginning_of_month)
-                      .sum(:balance) || 0
-  
-  # Obter todos os saldos diários ordenados por data
-  daily_balances = DailyBalance.joins(:book)
-                    .where(books: { user_id: user.id })
-                    .where(date: date_range)
-                    .order(:date)
-                    .pluck(:date, :balance)
-  
-  # Obter todas as transações agrupadas por dia
-  daily_transactions = Transaction.joins(:book)
+      cumulative_data = []
+      cumulative_profit = 0
+      previous_balance = 0
+      
+      puts "\n=== CÁLCULO DE LUCRO ACUMULADO ==="
+      puts "Data Inicial: #{date_range.first}, Data Final: #{date_range.last}"
+
+      # Obter todos os saldos diários
+      daily_balances = DailyBalance.joins(:book)
                         .where(books: { user_id: user.id })
                         .where(date: date_range)
-                        .group(:date)
-                        .group(:transaction_type)
-                        .sum(:amount)
-  
-  # Processar cada dia do mês (incluindo dias sem movimentação)
-  (date_range.first..date_range.last).each do |date|
-    balance = daily_balances.find { |d, _| d == date }&.last || (date == date_range.first ? initial_balance : nil)
-    
-    # Só processar se tivermos saldo para o dia (ou for o primeiro dia)
-    if balance || date == date_range.first
-      balance ||= initial_balance
-      
-      # Encontrar transações do dia
-      deposits = daily_transactions[[date, 'deposit']] || 0
-      withdrawals = daily_transactions[[date, 'withdraw']] || 0
-      
-      # Calcular lucro do dia: (Saldo atual - Saldo anterior) + Saques - Depósitos
-      previous_balance = if date == date_range.first
-                          initial_balance
-                        else
-                          prev_date = date - 1.day
-                          daily_balances.find { |d, _| d == prev_date }&.last || initial_balance
-                        end
-      
-      daily_profit = (balance - previous_balance) + withdrawals - deposits
-      cumulative_profit += daily_profit
-      
-      cumulative_data << [date, cumulative_profit]
+                        .order(:date)
+                        .pluck(:date, :balance)
+                        .to_h
+
+      puts "\nSaldos Diários:"
+      daily_balances.each { |date, balance| puts "#{date}: R$#{balance.to_f.round(2)}" }
+
+      # Obter todas as transações
+      daily_transactions = Transaction.joins(:book)
+                            .where(books: { user_id: user.id })
+                            .where(date: date_range)
+                            .group(:date, :transaction_type)
+                            .sum(:amount)
+
+      puts "\nTransações Diárias:"
+      daily_transactions.each { |(date, type), amount| puts "#{date} | #{type}: R$#{amount.to_f.round(2)}" }
+
+      (date_range.first..date_range.last).each do |date|
+        current_balance = daily_balances[date]
+        
+        unless current_balance
+          puts "\n#{date}: Sem saldo registrado - pulando"
+          next
+        end
+
+        deposits = daily_transactions[[date, 'deposit']] || 0
+        withdrawals = daily_transactions[[date, 'withdraw']] || 0
+
+        puts "\n--- Dia #{date} ---"
+        puts "Saldo Anterior: R$#{previous_balance.to_f.round(2)}"
+        puts "Saldo Atual: R$#{current_balance.to_f.round(2)}"
+        puts "Depósitos: R$#{deposits.to_f.round(2)}"
+        puts "Saques: R$#{withdrawals.to_f.round(2)}"
+
+        if date == date_range.first
+          daily_profit = current_balance + withdrawals - deposits
+          puts "Cálculo (Dia 1): #{current_balance} + #{withdrawals} - #{deposits} = R$#{daily_profit.round(2)}"
+        else
+          daily_profit = (current_balance - previous_balance) + withdrawals - deposits
+          puts "Cálculo: (#{current_balance} - #{previous_balance}) + #{withdrawals} - #{deposits} = R$#{daily_profit.round(2)}"
+        end
+
+        cumulative_profit += daily_profit
+        cumulative_data << [date, cumulative_profit.round(2)]
+        
+        puts "Lucro Acumulado: R$#{cumulative_profit.round(2)}"
+        previous_balance = current_balance
+      end
+
+      puts "\n=== RESULTADO FINAL ==="
+      cumulative_data.each { |date, profit| puts "#{date}: R$#{profit}" }
+
+      cumulative_data
     end
-  end
-  
-  cumulative_data
-end
 
     
 end
