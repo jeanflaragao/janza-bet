@@ -1,4 +1,10 @@
 class TransactionsController < ApplicationController
+  before_action :set_transaction, only: [:edit, :destroy]
+
+  def set_transaction
+    @transaction = Transaction.find(params[:id])
+  end
+
   def index
     @transactions =  Transaction.joins(:book).where(books: { user_id: current_user.id }).order(date: :desc).page(params[:page]).per(25)
   end
