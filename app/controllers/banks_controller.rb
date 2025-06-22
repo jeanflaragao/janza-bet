@@ -15,39 +15,45 @@ class BanksController < ApplicationController
     @bank = current_user.banks.new
   end
 
-  def edit
+ def edit
+    # Define o intervalo do mês atual
     date_range = @bank.month.beginning_of_month..@bank.month.end_of_month
+    
+    # Calcula o último dia do mês anterior
+    last_day_previous_month = @bank.month.prev_month.end_of_month
 
+    # Busca as transações do mês atual
     transactions = Transaction.joins(:book)
-                     .where(books: { user_id: current_user.id })
-                     .where(date: date_range)
+                    .where(books: { user_id: current_user.id })
+                    .where(date: date_range)
 
-      
-      @bank.total_deposits = transactions.where(transaction_type: 'deposit').sum(:amount)
-      @bank.total_withdrawals = transactions.where(transaction_type: 'withdraw').sum(:amount)
-      @bank.total_balance = sum_of_last_day_balance(@bank, current_user)
+    @bank.total_deposits = transactions.where(transaction_type: 'deposit').sum(:amount)
+    @bank.total_withdrawals = transactions.where(transaction_type: 'withdraw').sum(:amount)
+    @bank.total_balance = sum_of_last_day_balance(@bank, current_user)
 
+    # Busca o saldo do último dia do mês anterior
+    amount_last_day_previous_month = DailyBalance.joins(:book)
+                .where(books: { user_id: current_user.id })
+                .where(date: last_day_previous_month)
+                .sum(:balance)
 
-      amount_first_day = DailyBalance.joins(:book)
-                  .where(books: { user_id: current_user.id })
-                  .where(date: @bank.month.beginning_of_month)
-                  .sum(:balance)
-      
-      @bank.cash_money = (@bank.bank_value + @bank.total_withdrawals) - (amount_first_day + @bank.total_deposits);
-      
-      @daily_balances = DailyBalance.joins(:book)
-                          .where(books: { user_id: current_user.id })
-                          .where(date: date_range)
-                          .order(:date)
-      
-      @cumulative_profits = calculate_cumulative_profits(date_range, current_user)
-    end
+    initial_balance = if @bank.month.today? && Date.today.day == 1
+                    amount_previous_month_end
+                  else
+                    0
+                  end
+
+    # Calcula o dinheiro em caixa
+    @bank.cash_money = (@bank.bank_value + @bank.total_withdrawals) - (initial_balance + @bank.total_deposits)              
+    
+    @cumulative_profits = calculate_cumulative_profits(date_range, current_user, amount_last_day_previous_month)
+  end
 
   def create
     @bank = current_user.banks.new(bank_params)
 
     if @bank.save
-      flash.now[:notice] = "Banca foi criada com sucesso."
+      flash.now[:notice] = "Mês criado com sucesso."
       render turbo_stream: [
       turbo_stream.prepend("banks", @bank),
       turbo_stream.replace("form_bank", partial: "form", locals: { bank: Bank.new }
@@ -106,31 +112,35 @@ class BanksController < ApplicationController
                   .sum(:balance)
     end
 
-    def calculate_cumulative_profits(date_range, user)
+    def calculate_cumulative_profits(date_range, user, amount_last_day_previous_month)
       cumulative_data = []
       cumulative_profit = 0
-      previous_balance = 0
+      previous_balance = amount_last_day_previous_month
       
       puts "\n=== CÁLCULO DE LUCRO ACUMULADO ==="
       puts "Data Inicial: #{date_range.first}, Data Final: #{date_range.last}"
+      puts "Saldo do último dia do mês anterior: R$#{amount_last_day_previous_month.to_f.round(2)}"
 
       # Obter todos os saldos diários
       daily_balances = DailyBalance.joins(:book)
                         .where(books: { user_id: user.id })
                         .where(date: date_range)
-                        .order(:date)
-                        .pluck(:date, :balance)
+                        .group(:date)          # Agrupa por data
+                        .order(:date)          # Ordena por data
+                        .sum(:balance)         # Soma o saldo de cada grupo
                         .to_h
 
       puts "\nSaldos Diários:"
-      daily_balances.each { |date, balance| puts "#{date}: R$#{balance.to_f.round(2)}" }
+      daily_balances.each { |date, balance| puts "#{date}: R$#{
+        balance.to_f.round(2)}" }
 
       # Obter todas as transações
       daily_transactions = Transaction.joins(:book)
-                            .where(books: { user_id: user.id })
-                            .where(date: date_range)
-                            .group(:date, :transaction_type)
-                            .sum(:amount)
+                              .where(books: { user_id: user.id })
+                              .where(date: date_range)
+                              .group("DATE(date)", :transaction_type)  # Agrupa apenas pela data (sem hora)
+                              .order("DATE(date)")                     # Ordena pela data (sem hora)
+                              .sum(:amount)
 
       puts "\nTransações Diárias:"
       daily_transactions.each { |(date, type), amount| puts "#{date} | #{type}: R$#{amount.to_f.round(2)}" }
@@ -152,13 +162,9 @@ class BanksController < ApplicationController
         puts "Depósitos: R$#{deposits.to_f.round(2)}"
         puts "Saques: R$#{withdrawals.to_f.round(2)}"
 
-        if date == date_range.first
-          daily_profit = current_balance + withdrawals - deposits
-          puts "Cálculo (Dia 1): #{current_balance} + #{withdrawals} - #{deposits} = R$#{daily_profit.round(2)}"
-        else
-          daily_profit = (current_balance - previous_balance) + withdrawals - deposits
-          puts "Cálculo: (#{current_balance} - #{previous_balance}) + #{withdrawals} - #{deposits} = R$#{daily_profit.round(2)}"
-        end
+        # Cálculo do lucro diário (sempre comparando com o dia anterior)
+        daily_profit = (current_balance - previous_balance) + withdrawals - deposits
+        puts "Cálculo: (#{current_balance} - #{previous_balance}) + #{withdrawals} - #{deposits} = R$#{daily_profit.round(2)}"
 
         cumulative_profit += daily_profit
         cumulative_data << [date, cumulative_profit.round(2)]

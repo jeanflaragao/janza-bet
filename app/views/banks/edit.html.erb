@@ -1,4 +1,4 @@
-<% content_for :title, "Editar Banca" %>
+<% content_for :title, "Editar Mês" %>
 
 <div class="w-full min-h-screen bg-gray-50">
     <div class="bg-white shadow-xl rounded-xl overflow-hidden border border-gray-200">
@@ -26,7 +26,7 @@
                     <svg class="w-5 h-5 mr-2 -ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
                     </svg>
-                    Voltar para Bancas
+                    Voltar
                     <% end %>
                 </div>
             </div>
@@ -87,7 +87,7 @@
                     <div>
                         <p class="text-sm font-medium text-gray-500">Lucro</p>
                         <% 
-                profit = (@bank.total_balance + @bank.total_withdrawals + @bank.bank_value) - (@bank.bank_value + @bank.total_deposits)
+                profit = @cumulative_profits.last[1]
                 profit_class = profit.negative? ? 'text-red-600' : 'text-green-600'
               %>
                         <p class="text-2xl font-bold <%= profit_class %> mt-1">
