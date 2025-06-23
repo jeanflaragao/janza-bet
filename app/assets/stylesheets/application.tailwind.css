@@ -24,3 +24,9 @@ turbo-frame:nth-child(even) .table {
 .datefield {
   line-height: 1.12;
 }
+
+dialog[open] {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
