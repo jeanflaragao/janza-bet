@@ -1,5 +1,5 @@
 <%= turbo_frame_tag book do %>
-<div class="grid grid-cols-2 md:grid-cols-9 gap-4 items-center px-6 py-4 border-b border-gray-100 hover:bg-gray-50 text-sm transition-all duration-150 ease-in-out">
+<div class="grid grid-cols-2 md:grid-cols-5 gap-4 items-center px-6 py-4 border-b border-gray-100 hover:bg-gray-50 text-sm transition-all duration-150 ease-in-out">
 
     <div class="text-gray-800 font-medium"><%= book.owner %></div>
     <div class="text-gray-800 font-medium">
@@ -24,36 +24,6 @@
         <% end %>
     </div>
 
-    <!-- Deposit (not positive) = warning/orange -->
-    <div class="flex justify-end">
-        <span class="inline-block px-3 py-1 text-xs font-semibold rounded-full bg-yellow-100 text-yellow-800 text-right">
-            <%= number_to_currency(book.total_deposit) %>
-        </span>
-    </div>
-
-    <!-- Withdraw (positive) = green -->
-    <div class="flex justify-end">
-        <span class="inline-block px-3 py-1 text-xs font-semibold rounded-full bg-green-100 text-green-700 text-right">
-            <%= number_to_currency(book.total_withdraw.abs) %>
-        </span>
-    </div>
-
-    <!-- Balance = green if > deposit, else gray -->
-    <% balance = book.last_daily_balance || 0 %>
-    <% balance_class = balance > book.total_deposit ? "bg-green-100 text-green-700" : "bg-gray-100 text-gray-700" %>
-    <div class="flex justify-end">
-        <span class="inline-block px-3 py-1 text-xs font-semibold rounded-full text-right <%= balance_class %>">
-            <%= number_to_currency(balance) %>
-        </span>
-    </div>
-
-    <% result = (book.last_daily_balance || 0) + book.total_withdraw - book.total_deposit %>
-    <% result_class = result >= 0 ? "bg-green-100 text-green-700" : "bg-red-100 text-red-700" %>
-    <div class="flex justify-end">
-        <span class="inline-block px-3 py-1 text-xs font-semibold rounded-full text-right <%= result_class %>">
-            <%= number_to_currency(result) %>
-        </span>
-    </div>
 
     <!-- Actions -->
     <div class="flex justify-center items-center gap-4">
@@ -78,45 +48,52 @@
                     <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
                 </svg>
             </button>
-            <dialog data-modal-target="dialog" data-action="click->modal#clickOutside" class="w-full max-w-2xl rounded-lg shadow-xl backdrop:bg-black/50">
+            <dialog data-modal-target="dialog" data-action="click->modal#clickOutside" class="w-full max-w-2xl rounded-lg shadow-xl backdrop:bg-black/50 items-center justify-center p-4">
                 <div class="bg-white p-6 rounded-lg">
-                    <div class="flex justify-between items-center mb-4">
-                        <h3 class="text-lg font-bold">
-                            Transactions for <%= book.description %>
-                        </h3>
-                        <button data-action="modal#close" class="text-gray-500 hover:text-gray-700">
-                            ✕
-                        </button>
-                    </div>
+                    <div class="relative w-full max-w-4xl max-h-[90vh] bg-white rounded-xl shadow-2xl overflow-hidden transform transition-all">
+                        <!-- Modal Header -->
+                        <div class="flex items-center justify-between p-6 border-b border-gray-200 bg-gray-50">
+                            <h3 class="text-xl font-semibold text-gray-900">
+                                Transações de <%= book.description %>
+                            </h3>
+                            <button data-action="modal#close" class="p-1 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-full transition-colors">
+                                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                                </svg>
+                            </button>
+                        </div>
 
-                    <div class="overflow-y-auto max-h-[70vh]">
-                        <table class="min-w-full">
-                            <thead>
-                                <tr class="border-b">
-                                    <th class="text-left py-2">Data</th>
-                                    <th class="text-left py-2">Tipo</th>
-                                    <th class="text-right py-2">Valor</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <% book.transactions.order(date: :desc).each do |txn| %>
-                                <tr class="border-b">
-                                    <td class="py-2"><%= txn.date.strftime("%d/%m/%Y") %></td>
-                                    <td class="py-2">
-                                        <span class="px-2 py-1 text-xs rounded-full 
-              <%= txn.transaction_type == 'deposit' ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800' %>">
-                                            <%= txn.transaction_type.titleize %>
-                                        </span>
-                                    </td>
-                                    <td class="py-2 text-right">
-                                        <%= number_to_currency(txn.amount) %>
-                                    </td>
-                                </tr>
-                                <% end %>
-                            </tbody>
-                        </table>
+                        <div class="overflow-y-auto max-h-[calc(90vh-130px)]">
+                            <table class="min-w-full divide-y divide-gray-200">
+                                <thead class="bg-gray-50 sticky top-0">
+                                    <tr>
+                                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Data</th>
+                                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Tipo</th>
+                                        <th scope="col" class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Valor</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="bg-white divide-y divide-gray-200">
+                                    <% book.transactions.order(date: :desc).each do |txn| %>
+                                    <tr class="hover:bg-gray-50">
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                                            <%= txn.date.strftime("%d/%m/%Y") %>
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap">
+                                            <span class="px-2.5 py-1 text-xs font-medium rounded-full 
+                  <%= txn.transaction_type == 'deposit' ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800' %>">
+                                                <%= txn.transaction_type == 'deposit' ? 'Depósito' : 'Saque' %>
+                                            </span>
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-right font-medium 
+                <%= txn.transaction_type == 'deposit' ? 'text-green-600' : 'text-red-600' %>">
+                                            <%= number_to_currency(txn.amount) %>
+                                        </td>
+                                    </tr>
+                                    <% end %>
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
-                </div>
             </dialog>
         </div>
     </div>

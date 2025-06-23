@@ -1,4 +1,4 @@
-<% content_for :title, "Editar Book" %>
+<% content_for :title, "Show casa" %>
 
 <div class="w-full min-h-screen bg-gray-50">
     <div class="bg-white shadow-xl rounded-xl overflow-hidden border border-gray-200">
@@ -7,25 +7,16 @@
             <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
                 <div>
                     <div class="flex items-center gap-3">
+                        <svg class="w-8 h-8 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                        </svg>
                         <div>
-                            <h1 class="text-2xl font-bold text-gray-800"><%= @book.description %></h1>
-                            <div class="flex items-center gap-2 mt-1">
-                                <span class="text-sm font-medium text-gray-600">Situação:</span>
-                                <span class="text-xs px-2 py-1 bg-blue-100 text-blue-800 rounded-full">
-                                    <div class="flex justify-start">
-                                        <% if @book.inactive? %>
-                                        Inativada
-                                        <% else %>
-                                        Ativo
-                                        <% end %>
-                                    </div>
-                                </span>
-                            </div>
+                            <h1 class="text-2xl font-bold text-gray-800">Banca</h1>
                         </div>
                     </div>
                 </div>
                 <div>
-                    <%= link_to books_path, class: "inline-flex items-center px-4 py-2.5 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-all" do %>
+                    <%= link_to banks_path, class: "inline-flex items-center px-4 py-2.5 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-all" do %>
                     <svg class="w-5 h-5 mr-2 -ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
                     </svg>
@@ -42,7 +33,7 @@
                 <div class="flex items-center justify-between">
                     <div>
                         <p class="text-sm font-medium text-gray-500">Depósitos</p>
-                        <p class="text-2xl font-bold text-gray-900 mt-1"><%= number_to_currency(@total_deposit) %></p>
+                        <p class="text-2xl font-bold text-gray-900 mt-1"><%= number_to_currency(@bank.total_deposits) %></p>
                     </div>
                     <div class="p-3 rounded-full bg-red-50 text-red-600">
                         <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -57,7 +48,7 @@
                 <div class="flex items-center justify-between">
                     <div>
                         <p class="text-sm font-medium text-gray-500">Saques</p>
-                        <p class="text-2xl font-bold text-gray-900 mt-1"><%= number_to_currency( @total_withdraw) %></p>
+                        <p class="text-2xl font-bold text-gray-900 mt-1"><%= number_to_currency(@bank.total_withdrawals) %></p>
                     </div>
                     <div class="p-3 rounded-full bg-blue-50 text-blue-600">
                         <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -71,9 +62,9 @@
             <div class="bg-white border border-gray-200 rounded-xl p-5 shadow-sm hover:shadow-lg transition-all duration-300">
                 <div class="flex items-center justify-between">
                     <div>
-                        <p class="text-sm font-medium text-gray-500">Saldo atual</p>
-                        <p class="text-2xl font-bold <%=@last_daily_balance.negative? ? 'text-red-600' : 'text-green-600' %> mt-1">
-                            <%= number_to_currency(@last_daily_balance) %>
+                        <p class="text-sm font-medium text-gray-500">Saldo em contas</p>
+                        <p class="text-2xl font-bold <%= @bank.total_balance.negative? ? 'text-red-600' : 'text-green-600' %> mt-1">
+                            <%= number_to_currency(@bank.total_balance) %>
                         </p>
                     </div>
                     <div class="p-3 rounded-full bg-green-50 text-green-600">
@@ -90,10 +81,11 @@
                     <div>
                         <p class="text-sm font-medium text-gray-500">Lucro</p>
                         <% 
-                            profit_class = @total_profit.negative? ? 'text-red-600' : 'text-green-600'
-                        %>
+                profit = @cumulative_profits.last[1]
+                profit_class = profit.negative? ? 'text-red-600' : 'text-green-600'
+              %>
                         <p class="text-2xl font-bold <%= profit_class %> mt-1">
-                            <%= number_to_currency(@total_profit) %>
+                            <%= number_to_currency(profit) %>
                         </p>
                     </div>
                     <div class="p-3 rounded-full bg-purple-50 text-purple-600">
@@ -103,53 +95,65 @@
                     </div>
                 </div>
             </div>
+
         </div>
+
         <!-- Seção do Gráfico de Lucro Cumulativo -->
         <div class="p-6 border-t border-gray-200">
-            <h2 class="text-lg font-semibold text-gray-800 mb-4">Lucro Acumulado na casa</h2>
+            <h2 class="text-lg font-semibold text-gray-800 mb-4">Lucro Acumulado no Mês</h2>
             <div class="bg-white p-4 rounded-lg shadow-sm border border-gray-200">
-                <% if @accumulated_profit.present? %>
-                <%= line_chart @accumulated_profit,
-    height: "300px",
-    colors: ["#10B981"],
-    library: {
-      scales: {
-        y: {
-          beginAtZero: true,
-          ticks: {
-            callback: "function(value) { return 'R$ ' + value.toFixed(2).replace('.', ','); }"
-          }
-        }
-      },
-      plugins: {
-        annotation: {
-          annotations: {
-            zeroLine: {
-              type: 'line',
-              yMin: 0,
-              yMax: 0,
-              borderColor: '#6B7280',
-              borderWidth: 1,
-              borderDash: [6, 6],
-              label: {
-                content: 'Linha Zero',
-                enabled: true,
-                position: 'right',
-                backgroundColor: 'rgba(0,0,0,0.1)'
-              }
-            }
-          }
-        }
-      },
-      tooltips: {
-        callbacks: {
-          label: "function(item) { return 'Lucro Acumulado: R$ ' + item.yLabel.toFixed(2).replace('.', ','); }"
-        }
-      }
-    } %>
+                <% if @cumulative_profits.present? %>
+                <%= line_chart @cumulative_profits,
+                    height: "300px",
+                    colors: ["#3B82F6"],
+                    library: {
+                      elements: {
+                        line: {
+                          tension: 0.4
+                        }
+                      },
+                      scales: {
+                        y: {
+                          ticks: {
+                            callback: "function(value) { return 'R$ ' + value.toFixed(2).replace('.', ','); }"
+                          }
+                        }
+                      },
+                      tooltips: {
+                        callbacks: {
+                          label: "function(item) { return 'Total Acumulado: R$ ' + item.yLabel.toFixed(2).replace('.', ','); }"
+                        }
+                      },
+                      annotation: {
+                        annotations: [{
+                          type: 'line',
+                          mode: 'horizontal',
+                          scaleID: 'y',
+                          value: 0,
+                          borderColor: '#6B7280',
+                          borderWidth: 1,
+                          borderDash: [4, 4],
+                          label: {
+                            content: 'Break-even',
+                            enabled: true,
+                            position: 'left'
+                          }
+                        }]
+                      }
+                    } %>
                 <% else %>
                 <p class="text-gray-500">Nenhum dado disponível para exibir o gráfico.</p>
                 <% end %>
+            </div>
+        </div>
+
+        <!-- Rodapé com ações -->
+        <div class="px-6 py-4 bg-gray-50 border-t border-gray-200 flex flex-col sm:flex-row justify-between items-center gap-4">
+            <div class="text-sm text-gray-500">
+                Última atualização: <%= time_ago_in_words(@bank.updated_at) %> atrás
+            </div>
+            <div class="flex space-x-3">
+                <%= button_to "Excluir", @bank, method: :delete, data: { confirm: "Tem certeza que deseja excluir esta banca?" }, class: "px-4 py-2 text-sm font-medium text-white bg-red-600 border border-transparent rounded-md shadow-sm hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500" %>
             </div>
         </div>
     </div>

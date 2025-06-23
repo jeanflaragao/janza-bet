@@ -117,9 +117,11 @@ class BanksController < ApplicationController
       cumulative_profit = 0
       previous_balance = amount_last_day_previous_month
       
-      puts "\n=== CÁLCULO DE LUCRO ACUMULADO ==="
-      puts "Data Inicial: #{date_range.first}, Data Final: #{date_range.last}"
-      puts "Saldo do último dia do mês anterior: R$#{amount_last_day_previous_month.to_f.round(2)}"
+      
+      #puts "\n=== CÁLCULO DE LUCRO ACUMULADO ==="
+      #puts "Data Inicial: #{date_range.first}, Data Final: #{date_range.last}"
+      #puts "Saldo do último dia do mês anterior: R$#{amount_last_day_previous_month.to_f.round(2)}"
+      
 
       # Obter todos os saldos diários
       daily_balances = DailyBalance.joins(:book)
@@ -130,9 +132,9 @@ class BanksController < ApplicationController
                         .sum(:balance)         # Soma o saldo de cada grupo
                         .to_h
 
-      puts "\nSaldos Diários:"
-      daily_balances.each { |date, balance| puts "#{date}: R$#{
-        balance.to_f.round(2)}" }
+      #puts "\nSaldos Diários:"
+      #daily_balances.each { |date, balance| puts "#{date}: R$#{
+      #  balance.to_f.round(2)}" }
 
       # Obter todas as transações
       daily_transactions = Transaction.joins(:book)
@@ -142,39 +144,39 @@ class BanksController < ApplicationController
                               .order("DATE(date)")                     # Ordena pela data (sem hora)
                               .sum(:amount)
 
-      puts "\nTransações Diárias:"
-      daily_transactions.each { |(date, type), amount| puts "#{date} | #{type}: R$#{amount.to_f.round(2)}" }
+      #puts "\nTransações Diárias:"
+      #daily_transactions.each { |(date, type), amount| puts "#{date} | #{type}: R$#{amount.to_f.round(2)}" }
 
       (date_range.first..date_range.last).each do |date|
         current_balance = daily_balances[date]
         
         unless current_balance
-          puts "\n#{date}: Sem saldo registrado - pulando"
+          #puts "\n#{date}: Sem saldo registrado - pulando"
           next
         end
 
         deposits = daily_transactions[[date, 'deposit']] || 0
         withdrawals = daily_transactions[[date, 'withdraw']] || 0
 
-        puts "\n--- Dia #{date} ---"
-        puts "Saldo Anterior: R$#{previous_balance.to_f.round(2)}"
-        puts "Saldo Atual: R$#{current_balance.to_f.round(2)}"
-        puts "Depósitos: R$#{deposits.to_f.round(2)}"
-        puts "Saques: R$#{withdrawals.to_f.round(2)}"
+        #puts "\n--- Dia #{date} ---"
+        #puts "Saldo Anterior: R$#{previous_balance.to_f.round(2)}"
+        #puts "Saldo Atual: R$#{current_balance.to_f.round(2)}"
+        #puts "Depósitos: R$#{deposits.to_f.round(2)}"
+        #puts "Saques: R$#{withdrawals.to_f.round(2)}"
 
         # Cálculo do lucro diário (sempre comparando com o dia anterior)
         daily_profit = (current_balance - previous_balance) + withdrawals - deposits
-        puts "Cálculo: (#{current_balance} - #{previous_balance}) + #{withdrawals} - #{deposits} = R$#{daily_profit.round(2)}"
+        #puts "Cálculo: (#{current_balance} - #{previous_balance}) + #{withdrawals} - #{deposits} = R$#{daily_profit.round(2)}"
 
         cumulative_profit += daily_profit
         cumulative_data << [date, cumulative_profit.round(2)]
         
-        puts "Lucro Acumulado: R$#{cumulative_profit.round(2)}"
+        #puts "Lucro Acumulado: R$#{cumulative_profit.round(2)}"
         previous_balance = current_balance
       end
 
-      puts "\n=== RESULTADO FINAL ==="
-      cumulative_data.each { |date, profit| puts "#{date}: R$#{profit}" }
+      #puts "\n=== RESULTADO FINAL ==="
+      #cumulative_data.each { |date, profit| puts "#{date}: R$#{profit}" }
 
       cumulative_data
     end

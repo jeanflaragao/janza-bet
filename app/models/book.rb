@@ -12,18 +12,6 @@ class Book < ApplicationRecord
   
   before_validation :set_description
 
-  def total_deposit
-    transactions.where(transaction_type: 'deposit').sum(:amount)
-  end
-
-  def total_withdraw
-    transactions.where(transaction_type: 'withdraw').sum(:amount)
-  end
-
-  def last_daily_balance
-    daily_balances.order(date: :desc).limit(1).pluck(:balance).first
-  end
-
   private
 
   def set_description
