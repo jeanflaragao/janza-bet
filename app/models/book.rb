@@ -12,6 +12,10 @@ class Book < ApplicationRecord
   
   before_validation :set_description
 
+  def last_daily_balance
+    daily_balances.order(date: :desc).limit(1).pluck(:balance).first
+  end
+  
   private
 
   def set_description
