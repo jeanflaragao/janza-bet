@@ -2,7 +2,7 @@ class BooksController < ApplicationController
   before_action :set_book, only: %i[ show edit update destroy ]
 
   def index
-    @books = Current.user.books.order(:inactive, :description)
+    @books = Book.includes(:transactions).where(books: {user: Current.user}).order(:inactive, :description)
   end
 
   def show; end

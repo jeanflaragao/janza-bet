@@ -79,7 +79,7 @@
                                 </tr>
                             </thead>
                             <tbody class="bg-white divide-y divide-gray-200">
-                                <% book.transactions.order(date: :desc).each do |txn| %>
+                                <% book.transactions.sort_by{|t| t.date }.each do |txn| %>
                                 <tr class="hover:bg-gray-50 transition-colors duration-150">
                                     <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
                                         <%= txn.date.strftime("%d/%m/%Y") %>
@@ -103,7 +103,7 @@
                     <!-- Rodapé -->
                     <div class="flex items-center justify-between p-4 border-t border-gray-200 bg-gray-50">
                         <div class="text-sm text-gray-500">
-                            <%= book.transactions.count %> transações encontradas
+                            <%= book.transactions.size %> transações encontradas
                         </div>
                         <button data-action="modal#close" class="px-4 py-2 text-sm font-medium text-white bg-indigo-600 rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition-colors duration-200">
                             Fechar
