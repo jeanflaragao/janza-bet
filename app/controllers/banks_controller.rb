@@ -32,7 +32,7 @@ class BanksController < ApplicationController
     @bank.total_balance = sum_of_last_day_balance(@bank, current_user)
 
     # Busca o saldo do último dia do mês anterior
-    amount_last_day_previous_month = DailyBalance.joins(:book)
+    @amount_last_day_previous_month = DailyBalance.joins(:book)
                 .where(books: { user_id: current_user.id })
                 .where(date: last_day_previous_month)
                 .sum(:balance)
@@ -46,7 +46,7 @@ class BanksController < ApplicationController
     # Calcula o dinheiro em caixa
     @bank.cash_money = (@bank.bank_value + @bank.total_withdrawals) - (initial_balance + @bank.total_deposits)              
     
-    @cumulative_profits = calculate_cumulative_profits(date_range, current_user, amount_last_day_previous_month)
+    @cumulative_profits = calculate_cumulative_profits(date_range, current_user, @amount_last_day_previous_month)
   end
 
   def create
