@@ -1,5 +1,18 @@
 # See https://git-scm.com/docs/gitattributes for more about git attribute files.
 
+# Normalize line endings to LF on commit (prevents CRLF breaking shebangs in Docker/Linux)
+* text=auto eol=lf
+
+# Force LF for all shell/ruby executables — critical for Docker builds
+bin/* text eol=lf
+*.sh text eol=lf
+*.rb text eol=lf
+*.erb text eol=lf
+*.yml text eol=lf
+*.yaml text eol=lf
+Dockerfile text eol=lf
+Procfile* text eol=lf
+
 # Mark the database schema as having been generated.
 db/schema.rb linguist-generated
 
