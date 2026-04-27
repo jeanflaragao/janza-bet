@@ -79,9 +79,10 @@ end
     if @book.update(book_params)
       respond_to do |format|
         format.turbo_stream do
+          flash.now[:notice] = "Casa atualizada."
           render turbo_stream: [
             turbo_stream.replace(@book, partial: "books/book", locals: { book: @book }),
-            turbo_stream.replace("flash", partial: "shared/flash", locals: { notice: "Book updated" })
+            turbo_stream.replace("notice", partial: "layouts/flash")
           ]
         end
         format.html { redirect_to books_path, notice: "Book updated" }

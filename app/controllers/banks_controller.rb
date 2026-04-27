@@ -38,7 +38,7 @@ class BanksController < ApplicationController
                 .sum(:balance)
 
     initial_balance = if @bank.month.today? && Date.today.day == 1
-                    amount_previous_month_end
+                    @amount_last_day_previous_month
                   else
                     0
                   end

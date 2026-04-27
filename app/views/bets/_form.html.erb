@@ -1,20 +1,53 @@
-<%= form_with(model: bet, local: true) do |form| %>
-<div class="container mx-auto max-w-6xl bg-white shadow-md rounded-lg p-6">
-    <div class="grid grid-cols-4 gap-4">
-        <%= form.date_field :event_date, class: "border p-2 w-full rounded", placeholder: "Event Date" %>
-        <%= form.text_field :game, class: "border p-2 w-full rounded", placeholder: "Game" %>
-        <%= form.text_field :bet, class: "border p-2 w-full rounded", placeholder: "Bet" %>
-        <%= form.number_field :stake, step: 0.01, class: "border p-2 w-full rounded", placeholder: "Stake" %>
+<%= form_with(model: bet, id: "form_bet") do |form| %>
+<div class="bg-white shadow-md rounded-lg p-6 mb-6">
+    <% if bet.errors.any? %>
+    <div class="mb-4 p-3 bg-red-50 border border-red-200 rounded-md" role="alert">
+        <p class="text-sm font-medium text-red-700 mb-1">Por favor corrija os erros abaixo:</p>
+        <ul class="list-disc list-inside text-sm text-red-600 space-y-0.5">
+            <% bet.errors.full_messages.each do |msg| %>
+            <li><%= msg %></li>
+            <% end %>
+        </ul>
+    </div>
+    <% end %>
 
-        <%= form.number_field :odd, step: 0.01, class: "border p-2 w-full rounded", placeholder: "Odd" %>
-        <%= form.select :status, Bet::STATUSES, { prompt: "Status" }, class: "border p-2 w-full rounded" %>
-        <%= form.collection_select :book_id, Book.all, :id, :description, { prompt: "Book" }, class: "border p-2 w-full rounded" %>
-        <%= form.collection_select :tipster_id, Tipster.all, :id, :name, { prompt: "Tipster" }, class: "border p-2 w-full rounded" %>
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+        <div>
+            <%= form.label :event_date, "Data do evento", class: "block text-sm font-medium text-gray-700 mb-1" %>
+            <%= form.date_field :event_date, class: "border border-gray-300 p-2 w-full rounded-md focus:ring-blue-500 focus:border-blue-500" %>
+        </div>
+        <div>
+            <%= form.label :game, "Jogo", class: "block text-sm font-medium text-gray-700 mb-1" %>
+            <%= form.text_field :game, placeholder: "Ex: Flamengo x Corinthians", class: "border border-gray-300 p-2 w-full rounded-md focus:ring-blue-500 focus:border-blue-500" %>
+        </div>
+        <div>
+            <%= form.label :bet, "Aposta", class: "block text-sm font-medium text-gray-700 mb-1" %>
+            <%= form.text_field :bet, placeholder: "Ex: 1X2 Casa", class: "border border-gray-300 p-2 w-full rounded-md focus:ring-blue-500 focus:border-blue-500" %>
+        </div>
+        <div>
+            <%= form.label :stake, "Stake", class: "block text-sm font-medium text-gray-700 mb-1" %>
+            <%= form.number_field :stake, step: 0.01, placeholder: "0.00", class: "border border-gray-300 p-2 w-full rounded-md focus:ring-blue-500 focus:border-blue-500" %>
+        </div>
+        <div>
+            <%= form.label :odd, "Odd", class: "block text-sm font-medium text-gray-700 mb-1" %>
+            <%= form.number_field :odd, step: 0.01, placeholder: "1.00", class: "border border-gray-300 p-2 w-full rounded-md focus:ring-blue-500 focus:border-blue-500" %>
+        </div>
+        <div>
+            <%= form.label :status, "Status", class: "block text-sm font-medium text-gray-700 mb-1" %>
+            <%= form.select :status, Bet::STATUSES, { prompt: "Selecione" }, class: "border border-gray-300 p-2 w-full rounded-md focus:ring-blue-500 focus:border-blue-500" %>
+        </div>
+        <div>
+            <%= form.label :book_id, "Casa", class: "block text-sm font-medium text-gray-700 mb-1" %>
+            <%= form.collection_select :book_id, current_user.books.order(:description), :id, :description, { prompt: "Selecione" }, class: "border border-gray-300 p-2 w-full rounded-md focus:ring-blue-500 focus:border-blue-500" %>
+        </div>
+        <div>
+            <%= form.label :tipster_id, "Tipster", class: "block text-sm font-medium text-gray-700 mb-1" %>
+            <%= form.collection_select :tipster_id, Tipster.all, :id, :name, { prompt: "Selecione" }, class: "border border-gray-300 p-2 w-full rounded-md focus:ring-blue-500 focus:border-blue-500" %>
+        </div>
     </div>
 
-    <div class="mt-6 text-right">
-        <%= form.submit "Save", class: "bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-6 rounded shadow" %>
+    <div class="mt-4 text-right">
+        <%= form.submit "Salvar", class: "bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-6 rounded-md shadow cursor-pointer transition-colors" %>
     </div>
 </div>
-
 <% end %>

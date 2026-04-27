@@ -1,31 +1,74 @@
-<%= turbo_frame_tag dom_id(bet) do %>
-<% if params[:editing].to_s == bet.id.to_s %>
-<%= form_with model: bet, data: { controller: "inline-edit", action: "blur->inline-edit#submit" }, class: "grid grid-cols-9 gap-4 items-center px-6 py-3 border-b border-gray-200 text-sm" do |f| %>
-<div><%= f.date_field :event_date, class: "w-full" %></div>
-<div><%= f.text_field :game, class: "w-full" %></div>
-<div><%= f.text_field :bet, class: "w-full" %></div>
-<div><%= f.number_field :stake, step: 0.01, class: "w-full" %></div>
-<div><%= f.number_field :odd, step: 0.01, class: "w-full" %></div>
-<div><%= f.select :status, Bet::STATUSES, include_blank: true, class: "w-full" %></div>
-<div><%= f.collection_select :book_id, Book.all, :id, :name, { include_blank: true }, class: "w-full" %></div>
-<div><%= f.collection_select :tipster_id, Tipster.all, :id, :name, { include_blank: true }, class: "w-full" %></div>
-<div></div>
-<% end %>
+<% if local_assigns[:editing] %>
+<tr id="<%= dom_id(bet) %>" class="bg-blue-50 text-sm">
+  <td colspan="9" class="px-4 py-3">
+    <%= form_with model: bet, class: "flex flex-wrap gap-2 items-center" do |f| %>
+      <div class="flex flex-wrap gap-2 items-end flex-1">
+        <div>
+          <%= f.label :event_date, "Data", class: "block text-xs text-gray-600 mb-0.5" %>
+          <%= f.date_field :event_date, class: "border border-gray-300 rounded p-1.5 text-xs" %>
+        </div>
+        <div>
+          <%= f.label :game, "Jogo", class: "block text-xs text-gray-600 mb-0.5" %>
+          <%= f.text_field :game, class: "border border-gray-300 rounded p-1.5 text-xs w-32" %>
+        </div>
+        <div>
+          <%= f.label :bet, "Aposta", class: "block text-xs text-gray-600 mb-0.5" %>
+          <%= f.text_field :bet, class: "border border-gray-300 rounded p-1.5 text-xs w-32" %>
+        </div>
+        <div>
+          <%= f.label :stake, "Stake", class: "block text-xs text-gray-600 mb-0.5" %>
+          <%= f.number_field :stake, step: 0.01, class: "border border-gray-300 rounded p-1.5 text-xs w-24" %>
+        </div>
+        <div>
+          <%= f.label :odd, "Odd", class: "block text-xs text-gray-600 mb-0.5" %>
+          <%= f.number_field :odd, step: 0.01, class: "border border-gray-300 rounded p-1.5 text-xs w-20" %>
+        </div>
+        <div>
+          <%= f.label :status, "Status", class: "block text-xs text-gray-600 mb-0.5" %>
+          <%= f.select :status, Bet::STATUSES, { include_blank: true }, class: "border border-gray-300 rounded p-1.5 text-xs" %>
+        </div>
+        <div>
+          <%= f.label :book_id, "Casa", class: "block text-xs text-gray-600 mb-0.5" %>
+          <%= f.collection_select :book_id, current_user.books.order(:description), :id, :description, { include_blank: true }, class: "border border-gray-300 rounded p-1.5 text-xs" %>
+        </div>
+        <div>
+          <%= f.label :tipster_id, "Tipster", class: "block text-xs text-gray-600 mb-0.5" %>
+          <%= f.collection_select :tipster_id, Tipster.all, :id, :name, { include_blank: true }, class: "border border-gray-300 rounded p-1.5 text-xs" %>
+        </div>
+      </div>
+      <div class="flex gap-2 mt-1">
+        <%= f.submit "Salvar", class: "px-3 py-1.5 bg-blue-600 hover:bg-blue-700 text-white text-xs font-medium rounded cursor-pointer transition-colors" %>
+        <%= link_to "Cancelar", bets_path, class: "px-3 py-1.5 bg-gray-100 hover:bg-gray-200 text-gray-700 text-xs font-medium rounded transition-colors" %>
+      </div>
+    <% end %>
+  </td>
+</tr>
 <% else %>
-<div class="grid grid-cols-9 gap-4 items-center px-6 py-3 border-b border-gray-200 hover:bg-gray-50 transition text-sm cursor-pointer" data-controller="inline-edit" data-action="click->inline-edit#edit" data-inline-edit-url-value="<%= inline_edit_bet_path(bet) %>">
-    <div><%= bet.event_date %></div>
-    <div><%= bet.game %></div>
-    <div><%= bet.bet %></div>
-    <div><%= number_to_currency bet.stake %></div>
-    <div><%= bet.odd %></div>
-    <div><%= bet.status.humanize %></div>
-    <div><%= bet.book.name %></div>
-    <div><%= bet.tipster&.name || "" %></div>
-    <div class="text-center flex justify-center gap-3">
-        <%= button_to bet_path(bet), method: :delete, form_class: "inline-block ml-4" do %>
-        🗑
+<tr id="<%= dom_id(bet) %>" class="hover:bg-gray-50 transition text-sm"
+    data-controller="inline-edit"
+    data-action="click->inline-edit#edit"
+    data-inline-edit-url-value="<%= inline_edit_bet_path(bet) %>">
+    <td class="px-4 py-3 whitespace-nowrap text-gray-700 cursor-pointer"><%= bet.event_date&.strftime("%d/%m/%Y") %></td>
+    <td class="px-4 py-3 text-gray-700 cursor-pointer"><%= bet.game %></td>
+    <td class="px-4 py-3 text-gray-700 cursor-pointer"><%= bet.bet %></td>
+    <td class="px-4 py-3 whitespace-nowrap text-gray-700 cursor-pointer"><%= number_to_currency bet.stake %></td>
+    <td class="px-4 py-3 whitespace-nowrap text-gray-700 cursor-pointer"><%= bet.odd %></td>
+    <td class="px-4 py-3 whitespace-nowrap cursor-pointer">
+        <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
+            <%= bet.status.humanize %>
+        </span>
+    </td>
+    <td class="px-4 py-3 text-gray-700 cursor-pointer"><%= bet.book.description %></td>
+    <td class="px-4 py-3 text-gray-500 cursor-pointer"><%= bet.tipster&.name %></td>
+    <td class="px-4 py-3 text-center" data-action="click->inline-edit#noOp">
+        <%= button_to bet_path(bet), method: :delete,
+              form: { data: { turbo_confirm: "Excluir esta aposta?" } },
+              class: "p-1.5 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded-full transition-colors",
+              aria: { label: "Excluir aposta #{bet.game}" } do %>
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+        </svg>
         <% end %>
-    </div>
-</div>
-<% end %>
+    </td>
+</tr>
 <% end %>

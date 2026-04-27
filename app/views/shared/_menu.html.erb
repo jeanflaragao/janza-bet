@@ -1,13 +1,23 @@
-    <nav class="bg-white shadow">
+    <nav class="bg-white shadow" aria-label="Navegação principal">
         <div class="container mx-auto px-4">
-            <ul class="flex justify-center space-x-6 py-4 text-gray-700 font-medium gap-4">
-                <li><%= link_to "Home", root_path, class: "text-gray-700 hover:text-blue-500" %></li>
-                <li><%= link_to "Meses", banks_path, class: "text-gray-700 hover:text-blue-500" %></li>
-                <li><%= link_to "Casas", books_path, class: "text-gray-700 hover:text-blue-500" %></li>
-                <li><%= link_to "Transações", transactions_path, class: "text-gray-700 hover:text-blue-500" %></li>
-                <li><%= link_to "Balanço diário", daily_balances_path, class: "text-gray-700 hover:text-blue-500" %></li>
-                <li><%= link_to "Authentication Page", pages_authentification_path, class: "text-gray-700 hover:text-blue-500" %></li>
-                <li><%= link_to "Account Page", pages_account_path, class: "text-gray-700 hover:text-blue-500" %></li>
+            <ul class="flex justify-center space-x-6 py-4 text-gray-700 font-medium gap-4" role="list">
+                <% nav_items = [
+                     ["Home",           root_path],
+                     ["Meses",          banks_path],
+                     ["Casas",          books_path],
+                     ["Transações",     transactions_path],
+                     ["Balanço diário", daily_balances_path],
+                     ["Autenticação",   pages_authentification_path],
+                     ["Conta",          pages_account_path]
+                   ] %>
+                <% nav_items.each do |label, path| %>
+                  <% active = current_page?(path) %>
+                  <li>
+                    <%= link_to label, path,
+                          class: "pb-1 transition-colors duration-150 #{active ? 'text-blue-600 border-b-2 border-blue-600 font-semibold' : 'text-gray-700 hover:text-blue-500'}",
+                          aria: { current: (active ? "page" : nil) } %>
+                  </li>
+                <% end %>
             </ul>
         </div>
     </nav>

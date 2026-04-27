@@ -1,25 +1,36 @@
-<div class="w-full container mx-auto mt-16 px-5">
-    <div class="flex justify-between items-center mb-4">
-        <h1 class="font-bold text-4xl">Bets</h1>
+<div class="w-full container mx-auto mt-8 px-5">
+    <div class="flex justify-between items-center mb-6">
+        <h1 class="font-bold text-3xl text-gray-900">Apostas</h1>
     </div>
+
     <%= turbo_frame_tag "new-bet-form", src: new_bet_path %>
 
-    <div class="bg-white shadow-md rounded-lg p-5">
-        <div class="w-full border border-gray-300 rounded-md">
-            <div class="grid grid-cols-9 bg-gray-100 font-bold py-3 px-4 border-b">
-                <div>Event</div>
-                <div>Game</div>
-                <div>Bet</div>
-                <div>Stake</div>
-                <div>Odd</div>
-                <div>Status</div>
-                <div>Book</div>
-                <div>Tipster</div>
-            </div>
-
-            <div id="bets">
-                <%= render @bets %>
-            </div>
+    <div class="bg-white shadow-md rounded-lg overflow-hidden">
+        <div class="overflow-x-auto">
+            <table class="min-w-full divide-y divide-gray-200">
+                <thead class="bg-gray-50">
+                    <tr>
+                        <th scope="col" class="px-4 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Data</th>
+                        <th scope="col" class="px-4 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Jogo</th>
+                        <th scope="col" class="px-4 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Aposta</th>
+                        <th scope="col" class="px-4 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Stake</th>
+                        <th scope="col" class="px-4 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Odd</th>
+                        <th scope="col" class="px-4 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Status</th>
+                        <th scope="col" class="px-4 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Casa</th>
+                        <th scope="col" class="px-4 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Tipster</th>
+                        <th scope="col" class="px-4 py-3 text-center text-xs font-semibold text-gray-600 uppercase tracking-wider">Ações</th>
+                    </tr>
+                </thead>
+                <tbody id="bets" class="bg-white divide-y divide-gray-100">
+                    <%= render @bets %>
+                </tbody>
+            </table>
         </div>
+
+        <% if @bets.empty? %>
+        <div class="p-8 text-center text-gray-400">
+            <p class="text-sm">Nenhuma aposta encontrada. Crie a sua primeira aposta acima.</p>
+        </div>
+        <% end %>
     </div>
 </div>

@@ -3,16 +3,17 @@ import { Controller } from "@hotwired/stimulus"
 export default class extends Controller {
     static values = { url: String }
 
-    async showForm(event) {
+    edit(event) {
         event.preventDefault()
-        console.log("Fetching form from:", this.urlValue)
-
-        const response = await fetch(this.urlValue, {
+        event.stopPropagation()
+        fetch(this.urlValue, {
             headers: { Accept: "text/vnd.turbo-stream.html" }
         })
+        .then(r => r.text())
+        .then(html => Turbo.renderStreamMessage(html))
+    }
 
-        const html = await response.text()
-        console.log("Turbo stream HTML:", html)
-        Turbo.renderStreamMessage(html)
+    noOp(event) {
+        event.stopPropagation()
     }
 }
