@@ -1,10 +1,11 @@
 class PagesController < ApplicationController
-  allow_unauthenticated_access only: [:about,:authentification]
-  before_action :resume_session, only: [:authentification]
+  allow_unauthenticated_access only: [:about, :authentication]
+  before_action :resume_session, only: [:authentication]
+
   def about
   end
 
-  def authentification
+  def authentication
   end
 
   def account
