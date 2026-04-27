@@ -1,5 +1,5 @@
 class BetsController < ApplicationController
-  before_action :set_bet, only: %i[ show edit update destroy ]
+  before_action :set_bet, only: %i[ show edit inline_edit update destroy ]
 
   def index
     @bets = Current.user.bets.all
@@ -12,12 +12,10 @@ class BetsController < ApplicationController
   end
 
   def edit
-    @bet = Bet.find(params[:id])
     render partial: "bet", locals: { bet: @bet }
   end
 
   def inline_edit
-    @bet = Bet.find(params[:id])
     render partial: "bet", locals: { bet: @bet }, formats: [:html], status: :ok
   end
   
@@ -44,7 +42,6 @@ class BetsController < ApplicationController
   end
 
   def update
-    @bet = Bet.find(params[:id])
     if @bet.update(bet_params)
       respond_to do |format|
         format.turbo_stream { render partial: "bet", locals: { bet: @bet } }
@@ -67,7 +64,7 @@ class BetsController < ApplicationController
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_bet
-      @bet = Bet.find(params[:id])
+      @bet = current_user.bets.find(params[:id])
     end
     
 

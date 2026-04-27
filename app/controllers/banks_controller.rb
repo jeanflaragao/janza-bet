@@ -90,7 +90,7 @@ class BanksController < ApplicationController
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_bank
-      @bank = Bank.find(params.expect(:id))
+      @bank = current_user.banks.find(params.expect(:id))
     end
 
     # Only allow a list of trusted parameters through.

@@ -76,8 +76,6 @@ end
   end
 
   def update
-    @book = Book.find(params[:id])
-    
     if @book.update(book_params)
       respond_to do |format|
         format.turbo_stream do
@@ -103,7 +101,7 @@ end
   end
 
   def transactions
-    @book = Book.find(params[:id])
+    @book = current_user.books.find(params[:id])
     @transactions = @book.transactions
   
     respond_to do |format|
@@ -116,7 +114,7 @@ end
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_book
-      @book = Book.find(params[:id])
+      @book = current_user.books.find(params[:id])
     end
 
     # Only allow a list of trusted parameters through.

@@ -2,7 +2,7 @@ class TransactionsController < ApplicationController
   before_action :set_transaction, only: [:edit, :destroy]
 
   def set_transaction
-    @transaction = Transaction.find(params[:id])
+    @transaction = Transaction.joins(:book).where(books: { user_id: current_user.id }).find(params[:id])
   end
 
   def index
@@ -10,7 +10,6 @@ class TransactionsController < ApplicationController
   end
 
   def edit
-    @transaction = Transaction.find(params[:id])
   end
   
   def new
