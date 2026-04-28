@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <title>Janza Bet — Gestão Inteligente de Apostas Esportivas</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="description" content="Controle sua banca, registre apostas, acompanhe tipsters e visualize seu desempenho. Gestão profissional de apostas esportivas.">
+  <%= csrf_meta_tags %>
+  <%= csp_meta_tag %>
+  <link rel="icon" href="/icon.png" type="image/png">
+  <%= stylesheet_link_tag :app, "data-turbo-track": "reload" %>
+  <%= javascript_importmap_tags %>
+</head>
+<body class="antialiased bg-slate-950 text-white">
+  <%= yield %>
+</body>
+</html>
