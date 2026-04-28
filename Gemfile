@@ -43,12 +43,13 @@ gem "thruster", require: false
 gem "chartkick"
 gem "groupdate"
 gem "chart-js-rails"
-gem 'kaminari'
+gem "kaminari"
 
 # Use Active Storage variants [https://guides.rubyonrails.org/active_storage_overview.html#transforming-images]
 # gem "image_processing", "~> 1.2"
 
 group :development, :test do
+  gem "dotenv-rails", "~> 3.1"
   gem "rspec-rails", "~> 7.0"
   gem "factory_bot_rails", "~> 6.0"
   gem "guard", "~> 2.0"
@@ -66,8 +67,8 @@ group :development, :test do
 end
 
 group :development do
-  gem 'letter_opener', '~> 1'
-  gem 'letter_opener_web', '~> 3'
+  gem "letter_opener", "~> 1"
+  gem "letter_opener_web", "~> 3"
 
   # Use console on exceptions pages [https://github.com/rails/web-console]
   gem "web-console"

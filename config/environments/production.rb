@@ -24,11 +24,11 @@ Rails.application.configure do
   # Store uploaded files on the local file system (see config/storage.yml for options).
   config.active_storage.service = :local
 
-  # Assume all access to the app is happening through a SSL-terminating reverse proxy.
-  config.assume_ssl = true
+  # Set RAILS_ASSUME_SSL=true when running behind an SSL-terminating proxy (e.g. AWS ALB, Nginx).
+  config.assume_ssl = ENV.fetch("RAILS_ASSUME_SSL", "false") == "true"
 
-  # Force all access to the app over SSL, use Strict-Transport-Security, and use secure cookies.
-  config.force_ssl = true
+  # Set RAILS_FORCE_SSL=true to redirect HTTP → HTTPS. Requires a real certificate.
+  config.force_ssl = ENV.fetch("RAILS_FORCE_SSL", "false") == "true"
 
   # Skip http-to-https redirect for the default health check endpoint.
   # config.ssl_options = { redirect: { exclude: ->(request) { request.path == "/up" } } }
