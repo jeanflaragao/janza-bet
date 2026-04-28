@@ -1,9 +1,9 @@
 <div id="notice" data-controller="flash">
   <% flash.each do |type, message| %>
     <% css = case type
-         when "notice" then "bg-green-50 text-green-700 border-green-300"
-         when "alert"  then "bg-red-50 text-red-700 border-red-300"
-         else               "bg-gray-50 text-gray-700 border-gray-300"
+         when "notice" then "bg-emerald-500/15 text-emerald-300 border-emerald-500/30"
+         when "alert"  then "bg-red-500/15 text-red-300 border-red-500/30"
+         else               "bg-slate-700/50 text-slate-300 border-white/10"
        end %>
     <div class="mx-auto md:w-2/3 w-full mb-4" role="alert" aria-live="polite">
       <p class="py-2 px-4 border-l-4 <%= css %> rounded-r-lg font-medium text-sm">

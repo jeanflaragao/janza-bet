@@ -1,18 +1,18 @@
 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
     <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-8 gap-4">
         <div>
-            <h1 class="text-3xl font-bold text-gray-900">Transações</h1>
-            <p class="text-sm text-gray-500 mt-1">Todas as transações</p>
+            <h1 class="text-3xl font-bold text-white">Transações</h1>
+            <p class="text-sm text-slate-400 mt-1">Todas as transações</p>
         </div>
-        <div class="bg-blue-50 px-4 py-2 rounded-lg border border-blue-100">
-            <p class="text-sm text-blue-800"><%= @transactions.total_count %> transações no total</p>
+        <div class="bg-indigo-500/15 px-4 py-2 rounded-lg border border-indigo-500/20">
+            <p class="text-sm text-indigo-300"><%= @transactions.total_count %> transações no total</p>
         </div>
     </div>
 
-    <div class="bg-white shadow-lg rounded-xl overflow-hidden mb-8 border border-gray-100">
-        <div class="px-6 py-4 bg-gradient-to-r from-blue-50 to-indigo-50 border-b border-gray-100">
-            <h2 class="text-lg font-semibold text-gray-800 flex items-center gap-2">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-blue-600" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+    <div class="bg-slate-800 rounded-xl overflow-hidden mb-8 border border-white/10">
+        <div class="px-6 py-4 bg-slate-900 border-b border-white/10">
+            <h2 class="text-lg font-semibold text-white flex items-center gap-2">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-indigo-400" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
                     <path fill-rule="evenodd" d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z" clip-rule="evenodd" />
                 </svg>
                 Criar nova transação
@@ -23,28 +23,28 @@
         </div>
     </div>
 
-    <div class="bg-white shadow-lg rounded-xl overflow-hidden border border-gray-100">
+    <div class="bg-slate-800 rounded-xl overflow-hidden border border-white/10">
         <div class="overflow-x-auto">
-            <table class="min-w-full divide-y divide-gray-200">
-                <thead class="bg-gradient-to-r from-gray-50 to-gray-100">
+            <table class="min-w-full divide-y divide-white/10">
+                <thead class="bg-slate-900">
                     <tr>
-                        <th scope="col" class="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Data</th>
-                        <th scope="col" class="hidden md:table-cell px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Casa de aposta</th>
-                        <th scope="col" class="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Tipo</th>
-                        <th scope="col" class="px-6 py-4 text-right text-xs font-semibold text-gray-600 uppercase tracking-wider">Valor</th>
-                        <th scope="col" class="px-6 py-4 text-center text-xs font-semibold text-gray-600 uppercase tracking-wider">Ações</th>
+                        <th scope="col" class="px-6 py-4 text-left text-xs font-semibold text-slate-400 uppercase tracking-wider">Data</th>
+                        <th scope="col" class="hidden md:table-cell px-6 py-4 text-left text-xs font-semibold text-slate-400 uppercase tracking-wider">Casa de aposta</th>
+                        <th scope="col" class="px-6 py-4 text-left text-xs font-semibold text-slate-400 uppercase tracking-wider">Tipo</th>
+                        <th scope="col" class="px-6 py-4 text-right text-xs font-semibold text-slate-400 uppercase tracking-wider">Valor</th>
+                        <th scope="col" class="px-6 py-4 text-center text-xs font-semibold text-slate-400 uppercase tracking-wider">Ações</th>
                     </tr>
                 </thead>
-                <tbody id="transactions" class="bg-white divide-y divide-gray-100">
+                <tbody id="transactions" class="bg-slate-800 divide-y divide-white/10">
                     <% if @transactions.any? %>
                     <%= render @transactions %>
                     <% else %>
                     <tr>
                         <td colspan="5" class="px-6 py-12 text-center">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10 mx-auto text-gray-300 mb-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10 mx-auto text-slate-600 mb-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                             </svg>
-                            <p class="text-sm text-gray-500">Nenhuma transação encontrada. Crie a sua primeira acima.</p>
+                            <p class="text-sm text-slate-500">Nenhuma transação encontrada. Crie a sua primeira acima.</p>
                         </td>
                     </tr>
                     <% end %>
@@ -53,17 +53,17 @@
         </div>
 
         <% if @transactions.total_pages > 1 %>
-        <nav class="bg-gray-50 px-6 py-4 border-t border-gray-200 flex justify-between items-center" aria-label="Paginação">
-            <p class="text-sm text-gray-500">
+        <nav class="bg-slate-900 px-6 py-4 border-t border-white/10 flex justify-between items-center" aria-label="Paginação">
+            <p class="text-sm text-slate-400">
                 Página <%= @transactions.current_page %> de <%= @transactions.total_pages %>
                 &middot; <%= @transactions.total_count %> transações
             </p>
             <div class="flex gap-2">
                 <%= link_to "Anterior", transactions_path(page: @transactions.prev_page),
-                      class: "px-3 py-1.5 text-sm rounded border #{@transactions.first_page? ? 'border-gray-200 text-gray-300 pointer-events-none' : 'border-gray-300 text-gray-700 hover:bg-gray-100'}",
+                      class: "px-3 py-1.5 text-sm font-medium rounded-lg border #{@transactions.first_page? ? 'border-white/5 text-slate-600 bg-slate-900 pointer-events-none' : 'border-white/10 text-slate-300 bg-slate-800 hover:bg-slate-700 transition-colors'}",
                       aria: { disabled: @transactions.first_page? } %>
                 <%= link_to "Próxima", transactions_path(page: @transactions.next_page),
-                      class: "px-3 py-1.5 text-sm rounded border #{@transactions.last_page? ? 'border-gray-200 text-gray-300 pointer-events-none' : 'border-gray-300 text-gray-700 hover:bg-gray-100'}",
+                      class: "px-3 py-1.5 text-sm font-medium rounded-lg border #{@transactions.last_page? ? 'border-white/5 text-slate-600 bg-slate-900 pointer-events-none' : 'border-white/10 text-slate-300 bg-slate-800 hover:bg-slate-700 transition-colors'}",
                       aria: { disabled: @transactions.last_page? } %>
             </div>
         </nav>

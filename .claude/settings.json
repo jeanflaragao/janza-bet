@@ -4,7 +4,8 @@
       "Bash(xargs cat *)",
       "Bash(bundle exec *)",
       "Bash(python3 -c ' *)",
-      "Bash(git -C /home/rails/janza-bet status --short)"
+      "Bash(git -C /home/rails/janza-bet status --short)",
+      "Bash(docker compose *)"
     ]
   }
 }

@@ -1,9 +1,9 @@
 <% content_for :title, "New tipster" %>
 
 <div class="md:w-2/3 w-full">
-  <h1 class="font-bold text-4xl">New tipster</h1>
+  <h1 class="font-bold text-4xl text-white mb-4">Novo Tipster</h1>
 
   <%= render "form", tipster: @tipster %>
 
-  <%= link_to "Back to tipsters", tipsters_path, class: "w-full sm:w-auto text-center mt-2 sm:mt-0 sm:ml-2 rounded-md px-3.5 py-2.5 bg-gray-100 hover:bg-gray-50 inline-block font-medium" %>
+  <%= link_to "Voltar", tipsters_path, class: "w-full sm:w-auto text-center mt-2 sm:mt-0 sm:ml-2 inline-flex items-center justify-center gap-2 px-4 py-2.5 bg-slate-800 border border-white/10 hover:bg-slate-700 text-slate-300 text-sm font-medium rounded-lg transition-colors" %>
 </div>

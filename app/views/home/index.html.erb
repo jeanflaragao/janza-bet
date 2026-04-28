@@ -1,66 +1,44 @@
 <%# Define the colors based on profit %>
-<% text_color = @profit_total >= 0 ? 'purple' : 'orange' %>
+<% text_color = @profit_total >= 0 ? 'emerald' : 'red' %>
 
-<div class="flex justify-end gap-4 mb-4">
-    <%= link_to "🗓️ Mês anterior", root_path(filter: "last_month"), class: "px-4 py-2 rounded bg-green-100 hover:bg-green-200 text-green-800" %>
-    <%= link_to "📅 Mês atual", root_path(filter: "month"), class: "px-4 py-2 rounded bg-blue-100 hover:bg-blue-200 text-blue-800" %>
-    <%= link_to "🌎 Tudo", root_path(filter: "all_time"), class: "px-4 py-2 rounded bg-purple-100 hover:bg-purple-200 text-purple-800" %>
+<div class="flex justify-end gap-2 mb-4 flex-wrap">
+    <%= link_to "Mês anterior", root_path(filter: "last_month"), class: "px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 text-sm border border-white/10 transition-colors" %>
+    <%= link_to "Mês atual",    root_path(filter: "month"),      class: "px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 text-sm border border-white/10 transition-colors" %>
+    <%= link_to "Tudo",         root_path(filter: "all_time"),   class: "px-3 py-1.5 rounded-lg bg-indigo-500/20 hover:bg-indigo-500/30 text-indigo-300 text-sm border border-indigo-500/30 transition-colors" %>
 </div>
 
-<div class="flex flex-wrap gap-4 mb-6 pt-4">
-    <div class="flex-1 min-w-[200px]">
-        <div class="bg-red-50 rounded-lg p-4">
-            <div class="text-sm font-medium text-red-700">Depositos</div>
-            <div class="text-2xl font-bold text-red-900 mt-1">
-                <%= number_to_currency(@total_deposits) %>
-            </div>
-        </div>
+<div class="flex flex-wrap gap-4 mb-6 pt-2">
+    <div class="flex-1 min-w-[180px] bg-slate-800 border border-white/10 rounded-xl p-4">
+        <div class="text-xs font-medium text-slate-400 mb-1">Depósitos</div>
+        <div class="text-2xl font-bold text-white mt-1"><%= number_to_currency(@total_deposits) %></div>
     </div>
-
-    <div class="flex-1 min-w-[200px]">
-        <div class="bg-blue-50 rounded-lg p-4">
-            <div class="text-sm font-medium text-blue-700">Saques</div>
-            <div class="text-2xl font-bold text-blue-900 mt-1">
-                <%= number_to_currency(@total_withdrawals) %>
-            </div>
-        </div>
+    <div class="flex-1 min-w-[180px] bg-slate-800 border border-white/10 rounded-xl p-4">
+        <div class="text-xs font-medium text-slate-400 mb-1">Saques</div>
+        <div class="text-2xl font-bold text-white mt-1"><%= number_to_currency(@total_withdrawals) %></div>
     </div>
-
-    <div class="flex-1 min-w-[200px]">
-        <div class="bg-green-50 rounded-lg p-4">
-            <div class="text-sm font-medium text-green-700">Saldo em contas</div>
-            <div class="text-2xl font-bold text-green-900 mt-1">
-                <%= number_to_currency(@last_balance) %>
-            </div>
-        </div>
+    <div class="flex-1 min-w-[180px] bg-slate-800 border border-white/10 rounded-xl p-4">
+        <div class="text-xs font-medium text-slate-400 mb-1">Saldo em contas</div>
+        <div class="text-2xl font-bold text-emerald-400 mt-1"><%= number_to_currency(@last_balance) %></div>
     </div>
-
-    <div class="flex-1 min-w-[200px]">
-        <div class="bg-<%= text_color %>-50 rounded-lg p-4">
-            <div class="text-sm font-medium text-<%= text_color %>-700">
-                Lucro total
-            </div>
-            <div class="text-2xl font-bold text-<%= text_color %>-900 mt-1">
-                <%= number_to_currency(@profit_total) %>
-            </div>
-        </div>
+    <div class="flex-1 min-w-[180px] bg-slate-800 border border-white/10 rounded-xl p-4">
+        <div class="text-xs font-medium text-slate-400 mb-1">Lucro total</div>
+        <div class="text-2xl font-bold text-<%= text_color %>-400 mt-1"><%= number_to_currency(@profit_total) %></div>
     </div>
 </div>
 
-<div class="bg-white p-4 shadow rounded mb-6">
+<div class="bg-slate-800 border border-white/10 rounded-xl p-4 mb-6">
     <% if @daily_balances.present? %>
-    <%= line_chart @daily_balances.group_by_day(:date).sum(:balance), library: { height: "300px" } %>
+    <%= line_chart @daily_balances.group_by_day(:date).sum(:balance), library: { height: "300px" }, colors: ["#818cf8"] %>
     <% else %>
-    <p class="text-gray-500">No balance data available.</p>
+    <p class="text-slate-500 text-sm">Nenhum dado de saldo disponível.</p>
     <% end %>
 </div>
 
-<div class="bg-white p-4 shadow rounded mb-6">
-    <h3 class="text-lg font-medium mb-4">Distribuição da banca por casa</h3>
+<div class="bg-slate-800 border border-white/10 rounded-xl p-4 mb-6">
+    <h3 class="text-sm font-medium text-slate-400 mb-4">Distribuição da banca por casa</h3>
     <% if @balances_by_book.present? %>
     <%= pie_chart @balances_by_book, library: { height: "300px" } %>
     <% else %>
-    <p class="text-gray-500">No account balance data available.</p>
+    <p class="text-slate-500 text-sm">Nenhum dado disponível.</p>
     <% end %>
-</div>
 </div>

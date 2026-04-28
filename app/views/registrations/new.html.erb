@@ -1,38 +1,39 @@
-<div class="mx-auto md:w-2/3 w-full">
-    <h1 class="font-bold text-4xl mb-5">Register</h1>
+<div class="mx-auto md:w-1/2 w-full">
+  <h1 class="font-bold text-3xl mb-8">Criar conta</h1>
 
-    <%= form_with(model: @user, url: registration_path, local: true, class: "contents") do |form| %>
+  <%= form_with(model: @user, url: registration_path, local: true, class: "space-y-5") do |form| %>
     <% if @user.errors.any? %>
-    <div class="bg-red-50 text-red-500 font-medium p-4 rounded-lg mb-5">
-        <h2 class="font-bold mb-3"><%= pluralize(@user.errors.count, "error") %> prohibited this user from being saved:</h2>
-        <ul class="list-disc list-inside">
-            <% @user.errors.full_messages.each do |message| %>
-            <li><%= message %></li>
-            <% end %>
-        </ul>
+    <div class="bg-red-500/15 border border-red-500/30 text-red-300 font-medium p-4 rounded-lg">
+      <p class="font-semibold mb-2"><%= pluralize(@user.errors.count, "erro") %>:</p>
+      <ul class="list-disc list-inside space-y-1 text-sm">
+        <% @user.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+        <% end %>
+      </ul>
     </div>
     <% end %>
 
-    <div class="my-5">
-        <%= form.email_field :email_address, required: true, autofocus: true, autocomplete: "username", placeholder: "Enter your email address", value: params[:email_address], class: "block shadow rounded-md border border-gray-400 outline-none px-3 py-2 mt-2 w-full" %>
+    <div>
+      <%= form.email_field :email_address, required: true, autofocus: true, autocomplete: "username",
+            placeholder: "Seu e-mail", value: params[:email_address],
+            class: "block w-full bg-slate-800 border border-white/10 rounded-lg px-3 py-2.5 text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent" %>
     </div>
-
-    <div class="my-5">
-        <%= form.password_field :password, required: true, autocomplete: "current-password", placeholder: "Enter your password", maxlength: 72, class: "block shadow rounded-md border border-gray-400 outline-none px-3 py-2 mt-2 w-full" %>
+    <div>
+      <%= form.password_field :password, required: true, autocomplete: "new-password",
+            placeholder: "Senha", maxlength: 72,
+            class: "block w-full bg-slate-800 border border-white/10 rounded-lg px-3 py-2.5 text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent" %>
     </div>
-
-    <div class="my-5">
-        <%= form.password_field :password_confirmation, required: true, autocomplete: "current-password", placeholder: "Confirm password", maxlength: 72, class: "block shadow rounded-md border border-gray-400 outline-none px-3 py-2 mt-2 w-full" %>
+    <div>
+      <%= form.password_field :password_confirmation, required: true, autocomplete: "new-password",
+            placeholder: "Confirmar senha", maxlength: 72,
+            class: "block w-full bg-slate-800 border border-white/10 rounded-lg px-3 py-2.5 text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent" %>
     </div>
-
-    <div class="col-span-6 sm:flex sm:items-center sm:gap-4">
-        <div class="inline">
-            <%= form.submit "Register", class: "rounded-lg py-3 px-5 bg-blue-600 text-white inline-block font-medium cursor-pointer" %>
-        </div>
-
-        <div class="mt-4 text-sm text-gray-500 sm:mt-0">
-            <%= link_to "Login", new_session_path, class: "text-gray-700 underline" %>
-        </div>
+    <div class="flex items-center gap-4 pt-1">
+      <%= form.submit "Criar conta", class: "bg-indigo-600 hover:bg-indigo-500 text-white rounded-lg px-6 py-2.5 font-semibold cursor-pointer transition-colors shadow-lg shadow-indigo-600/20" %>
+      <p class="text-sm text-slate-500">
+        Já tem conta?
+        <%= link_to "Entrar", new_session_path, class: "text-indigo-400 hover:text-indigo-300 font-medium" %>
+      </p>
     </div>
-    <% end %>
+  <% end %>
 </div>

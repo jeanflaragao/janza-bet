@@ -1,8 +1,8 @@
 <%= form_with model: @book, id: "form_book" do |f| %>
 <% if @book.errors.any? %>
-<div class="mb-4 p-3 bg-red-50 border border-red-200 rounded-md" role="alert">
-    <p class="text-sm font-medium text-red-700 mb-1">Por favor corrija os erros abaixo:</p>
-    <ul class="list-disc list-inside text-sm text-red-600 space-y-0.5">
+<div class="mb-4 p-3 bg-red-500/15 border border-red-500/30 rounded-md" role="alert">
+    <p class="text-sm font-medium text-red-300 mb-1">Por favor corrija os erros abaixo:</p>
+    <ul class="list-disc list-inside text-sm text-red-400 space-y-0.5">
         <% @book.errors.full_messages.each do |msg| %>
         <li><%= msg %></li>
         <% end %>
@@ -12,24 +12,24 @@
 
 <div class="flex flex-wrap gap-4 items-end">
     <div>
-        <%= f.label :owner, "Dono", class: "block text-sm font-medium text-gray-700 mb-1" %>
-        <%= f.text_field :owner, placeholder: "Ex: João", class: "border border-gray-300 p-2 rounded-md focus:ring-blue-500 focus:border-blue-500" %>
+        <%= f.label :owner, "Dono", class: "block text-sm font-medium text-slate-300 mb-1" %>
+        <%= f.text_field :owner, placeholder: "Ex: João", class: "bg-slate-900 border border-white/10 text-white placeholder-slate-500 p-2 rounded-md focus:ring-indigo-500 focus:border-indigo-500" %>
     </div>
     <div>
-        <%= f.label :name, "Nome da casa", class: "block text-sm font-medium text-gray-700 mb-1" %>
-        <%= f.text_field :name, placeholder: "Ex: Bet365", class: "border border-gray-300 p-2 rounded-md focus:ring-blue-500 focus:border-blue-500" %>
+        <%= f.label :name, "Nome da casa", class: "block text-sm font-medium text-slate-300 mb-1" %>
+        <%= f.text_field :name, placeholder: "Ex: Bet365", class: "bg-slate-900 border border-white/10 text-white placeholder-slate-500 p-2 rounded-md focus:ring-indigo-500 focus:border-indigo-500" %>
     </div>
     <div>
-        <%= f.label :description, "Apelido", class: "block text-sm font-medium text-gray-700 mb-1" %>
-        <%= f.text_field :description, placeholder: "Ex: 365 Principal", class: "border border-gray-300 p-2 rounded-md focus:ring-blue-500 focus:border-blue-500" %>
+        <%= f.label :description, "Apelido", class: "block text-sm font-medium text-slate-300 mb-1" %>
+        <%= f.text_field :description, placeholder: "Ex: 365 Principal", class: "bg-slate-900 border border-white/10 text-white placeholder-slate-500 p-2 rounded-md focus:ring-indigo-500 focus:border-indigo-500" %>
     </div>
     <div class="flex items-center gap-2 pb-1">
-        <%= f.check_box :inactive, class: "h-4 w-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500" %>
-        <%= f.label :inactive, "Inativada", class: "text-sm text-gray-700" %>
+        <%= f.check_box :inactive, class: "h-4 w-4 rounded border-white/10 text-indigo-600 focus:ring-indigo-500 bg-slate-900" %>
+        <%= f.label :inactive, "Inativada", class: "text-sm text-slate-300" %>
     </div>
     <div>
         <%= f.submit @book.new_record? ? "Criar" : "Atualizar",
-                   class: "bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md font-semibold transition-colors cursor-pointer" %>
+                   class: "px-4 py-2.5 bg-indigo-600 hover:bg-indigo-500 text-white text-sm font-semibold rounded-lg transition-colors cursor-pointer" %>
     </div>
 </div>
 <% end %>

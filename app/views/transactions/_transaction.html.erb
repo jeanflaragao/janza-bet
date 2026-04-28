@@ -1,29 +1,29 @@
-<tr id="<%= dom_id(transaction) %>" class="hover:bg-gray-50 transition-colors duration-150 group text-sm">
+<tr id="<%= dom_id(transaction) %>" class="hover:bg-slate-700/50 transition-colors duration-150 group text-sm">
     <td class="px-6 py-4 whitespace-nowrap">
         <div class="flex items-center gap-2">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-slate-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
             </svg>
-            <span class="font-medium text-gray-700"><%= transaction.date&.strftime("%d/%m/%Y") || "—" %></span>
+            <span class="font-medium text-slate-300"><%= transaction.date&.strftime("%d/%m/%Y") || "—" %></span>
         </div>
     </td>
 
     <td class="hidden md:table-cell px-6 py-4">
-        <div class="text-gray-600 truncate max-w-[180px]" title="<%= transaction.book.description %>">
+        <div class="text-slate-300 truncate max-w-[180px]" title="<%= transaction.book.description %>">
             <%= transaction.book.description %>
         </div>
-        <div class="text-xs text-gray-400 mt-0.5">ID: <%= transaction.book_id %></div>
+        <div class="text-xs text-slate-500 mt-0.5">ID: <%= transaction.book_id %></div>
     </td>
 
     <td class="px-6 py-4 whitespace-nowrap">
         <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold
-                  <%= transaction.transaction_type == 'deposit' ? 'bg-green-50 text-green-700 ring-1 ring-green-600/20' : 'bg-red-50 text-red-700 ring-1 ring-red-600/20' %>">
+                  <%= transaction.transaction_type == 'deposit' ? 'bg-emerald-500/20 text-emerald-300' : 'bg-red-500/20 text-red-300' %>">
             <%= transaction.transaction_type == 'deposit' ? 'Depósito' : 'Saque' %>
         </span>
     </td>
 
     <td class="px-6 py-4 whitespace-nowrap text-right">
-        <span class="text-sm font-medium <%= transaction.transaction_type == 'deposit' ? 'text-green-600' : 'text-red-600' %>">
+        <span class="text-sm font-medium <%= transaction.transaction_type == 'deposit' ? 'text-emerald-400' : 'text-red-400' %>">
             <%= number_to_currency(transaction.amount, unit: "R$ ", separator: ",", delimiter: ".") %>
         </span>
     </td>
@@ -33,7 +33,7 @@
             <%= button_to transaction_path(transaction),
                   method: :delete,
                   form: { data: { turbo_confirm: "Excluir esta transação?", turbo_frame: "_top" } },
-                  class: "p-1.5 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded-full transition-colors",
+                  class: "p-1.5 text-slate-500 hover:text-red-400 hover:bg-red-500/10 rounded-full transition-colors",
                   aria: { label: "Excluir transação de #{transaction.date&.strftime('%d/%m/%Y')}" } do %>
             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
