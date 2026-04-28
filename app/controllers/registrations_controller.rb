@@ -1,5 +1,5 @@
 class RegistrationsController < ApplicationController
-  allow_unauthenticated_access only: [:new, :create, :confirm]
+  allow_unauthenticated_access only: [ :new, :create, :confirm ]
 
   def new
     @user = User.new
@@ -8,8 +8,12 @@ class RegistrationsController < ApplicationController
   def create
     @user = User.new(user_params)
     if @user.save
-      @user.send_confirmation_instructions
-      redirect_to root_url, notice: "Please check your email to confirm your account."
+      begin
+        @user.send_confirmation_instructions
+      rescue => e
+        Rails.logger.error "Could not send confirmation email to #{@user.email_address}: #{e.message}"
+      end
+      redirect_to new_session_path, notice: "Account created! Please check your email to confirm your account."
     else
       render :new
     end

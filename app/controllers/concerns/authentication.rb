@@ -2,6 +2,7 @@ module Authentication
   extend ActiveSupport::Concern
 
   included do
+    before_action :resume_session
     before_action :require_authentication
     helper_method :authenticated?
   end
@@ -14,15 +15,15 @@ module Authentication
 
   private
     def authenticated?
-      resume_session
+      Current.session.present?
     end
 
     def require_authentication
-      if resume_session
-        request_confirmation unless Current.session.user.confirmed?
-      else
+      unless Current.session
         request_authentication
+        return
       end
+      request_confirmation unless Current.session.user.confirmed?
     end
 
     def resume_session
@@ -34,7 +35,8 @@ module Authentication
     end
 
     def request_confirmation
-      redirect_to root_url, alert: "Please confirm your email address to continue."
+      terminate_session
+      redirect_to new_session_path, alert: "Please confirm your email address before signing in."
     end
 
 

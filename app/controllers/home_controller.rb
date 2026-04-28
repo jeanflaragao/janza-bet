@@ -1,5 +1,12 @@
 class HomeController < ApplicationController
+  allow_unauthenticated_access only: [:index]
+
   def index
+    unless current_user
+      render :landing, layout: "landing"
+      return
+    end
+
     case params[:filter]
     when "all_time"
       start_date = nil
